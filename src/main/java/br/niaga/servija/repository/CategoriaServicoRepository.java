@@ -1,4 +1,4 @@
 package br.niaga.servija.repository;
 
-public class CategoriaServicoRepository {
+public interface CategoriaServicoRepository {
 }
