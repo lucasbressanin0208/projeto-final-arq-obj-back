@@ -1,45 +1,31 @@
 package br.niaga.servija.models;
 
+import jakarta.persistence.*;
+import lombok.*;
+
+import java.util.List;
 import java.util.UUID;
 
+@Entity
+@Table(name = "categorias_servico")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class CategoriaServico {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
+
+    @Column(nullable = false, unique = true)
     private String nome;
+
     private String descricao;
-    private boolean ativo;
 
+    @Column(nullable = false)
+    private Boolean ativa;
 
-    public String getDescricao() {
-        return descricao;
-    }
-
-    public void setDescricao(String descricao) {
-        this.descricao = descricao;
-    }
-
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
-    }
-
-    public String getNome() {
-        return nome;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
-    public boolean isAtivo() {
-        return ativo;
-    }
-
-    public void setAtivo(boolean ativo) {
-        this.ativo = ativo;
-    }
-
+    @OneToMany(mappedBy = "categoria")
+    private List<Servico> servicos;
 }
