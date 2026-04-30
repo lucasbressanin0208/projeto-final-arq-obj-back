@@ -1,80 +1,54 @@
 package br.niaga.servija.models;
+
+import jakarta.persistence.*;
+import lombok.*;
+
+import java.time.LocalDateTime;
 import java.util.UUID;
 
+@Entity
+@Table(name = "servicos")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Servico {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
+
+    @Column(nullable = false)
     private String nome;
+
     private String descricao;
-    private double preco;
+
+    @Column(nullable = false)
+    private Double preco;
+
+    @Column(nullable = false)
     private Integer duracaoMinutos;
+
+    @Column(nullable = false)
+    private Boolean ativo;
+
+    @ManyToOne
+    @JoinColumn(name = "categoria_id", nullable = false)
     private CategoriaServico categoria;
+
+    @ManyToOne
+    @JoinColumn(name = "prestador_id", nullable = false)
     private Prestador prestador;
-    private boolean ativo;
 
-    public double getPreco() {
-        return preco;
+    public void ativar() {
+        this.ativo = true;
     }
 
-    public void setPreco(double preco) {
-        this.preco = preco;
+    public void desativar() {
+        this.ativo = false;
     }
 
-    public UUID getId() {
-        return id;
+    public LocalDateTime calcularHorarioFim(LocalDateTime dataHoraInicio) {
+        return dataHoraInicio.plusMinutes(duracaoMinutos);
     }
-
-    public void setId(UUID id) {
-        this.id = id;
-    }
-
-    public String getNome() {
-        return nome;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
-    public String getDescricao() {
-        return descricao;
-    }
-
-    public void setDescricao(String descricao) {
-        this.descricao = descricao;
-    }
-
-    public Integer getDuracaoMinutos() {
-        return duracaoMinutos;
-    }
-
-    public void setDuracaoMinutos(Integer duracaoMinutos) {
-        this.duracaoMinutos = duracaoMinutos;
-    }
-
-    public CategoriaServico getCategoria() {
-        return categoria;
-    }
-
-    public void setCategoria(CategoriaServico categoria) {
-        this.categoria = categoria;
-    }
-
-    public Prestador getPrestador() {
-        return prestador;
-    }
-
-    public void setPrestador(Prestador prestador) {
-        this.prestador = prestador;
-    }
-
-    public boolean isAtivo() {
-        return ativo;
-    }
-
-    public void setAtivo(boolean ativo) {
-        this.ativo = ativo;
-    }
-
-
 }
