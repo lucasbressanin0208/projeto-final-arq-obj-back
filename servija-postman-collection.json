@@ -1,0 +1,716 @@
+{
+  "info": {
+    "name": "Servija API",
+    "_postman_id": "servija-api-collection",
+    "description": "Coleção completa da API Servija. Após login, o token JWT é salvo automaticamente na variável {{token}} e usado em todas as requisições autenticadas.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:8080", "type": "string" },
+    { "key": "token",   "value": "",                      "type": "string" }
+  ],
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var res = pm.response.json();",
+                  "if (res.token) { pm.collectionVariables.set('token', res.token); }"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"cliente@email.com\",\n  \"senha\": \"senha123\",\n  \"tipo\": \"CLIENTE\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/auth/login", "host": ["{{baseUrl}}"], "path": ["auth", "login"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Clientes",
+      "item": [
+        {
+          "name": "Criar Cliente",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"João Silva\",\n  \"email\": \"joao@email.com\",\n  \"senha\": \"senha123\",\n  \"telefone\": \"11999999999\",\n  \"cpf\": \"12345678901\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/clientes", "host": ["{{baseUrl}}"], "path": ["clientes"] }
+          }
+        },
+        {
+          "name": "Listar Clientes",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{baseUrl}}/clientes", "host": ["{{baseUrl}}"], "path": ["clientes"] }
+          }
+        },
+        {
+          "name": "Buscar Cliente por ID",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{baseUrl}}/clientes/:id", "host": ["{{baseUrl}}"], "path": ["clientes", ":id"], "variable": [{ "key": "id", "value": "" }] }
+          }
+        },
+        {
+          "name": "Atualizar Cliente",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"João Silva Atualizado\",\n  \"email\": \"joao@email.com\",\n  \"senha\": \"novaSenha123\",\n  \"telefone\": \"11988888888\",\n  \"cpf\": \"12345678901\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/clientes/:id", "host": ["{{baseUrl}}"], "path": ["clientes", ":id"], "variable": [{ "key": "id", "value": "" }] }
+          }
+        },
+        {
+          "name": "Deletar Cliente",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{baseUrl}}/clientes/:id", "host": ["{{baseUrl}}"], "path": ["clientes", ":id"], "variable": [{ "key": "id", "value": "" }] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Prestadores",
+      "item": [
+        {
+          "name": "Criar Prestador",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"Maria Oliveira\",\n  \"email\": \"maria@email.com\",\n  \"senha\": \"senha123\",\n  \"telefone\": \"11977777777\",\n  \"descricao\": \"Especialista em limpeza residencial\",\n  \"enderecoId\": null\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/prestadores", "host": ["{{baseUrl}}"], "path": ["prestadores"] }
+          }
+        },
+        {
+          "name": "Listar Prestadores",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{baseUrl}}/prestadores", "host": ["{{baseUrl}}"], "path": ["prestadores"] }
+          }
+        },
+        {
+          "name": "Listar Prestadores Ativos",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{baseUrl}}/prestadores/ativos", "host": ["{{baseUrl}}"], "path": ["prestadores", "ativos"] }
+          }
+        },
+        {
+          "name": "Buscar por Cidade",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{baseUrl}}/prestadores/cidade/:cidade", "host": ["{{baseUrl}}"], "path": ["prestadores", "cidade", ":cidade"], "variable": [{ "key": "cidade", "value": "São Paulo" }] }
+          }
+        },
+        {
+          "name": "Buscar por Cidade e Bairro",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{baseUrl}}/prestadores/cidade/:cidade/bairro/:bairro", "host": ["{{baseUrl}}"], "path": ["prestadores", "cidade", ":cidade", "bairro", ":bairro"], "variable": [{ "key": "cidade", "value": "São Paulo" }, { "key": "bairro", "value": "Pinheiros" }] }
+          }
+        },
+        {
+          "name": "Buscar Prestador por ID",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{baseUrl}}/prestadores/:id", "host": ["{{baseUrl}}"], "path": ["prestadores", ":id"], "variable": [{ "key": "id", "value": "" }] }
+          }
+        },
+        {
+          "name": "Atualizar Prestador",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"Maria Oliveira Atualizado\",\n  \"email\": \"maria@email.com\",\n  \"senha\": \"novaSenha123\",\n  \"telefone\": \"11966666666\",\n  \"descricao\": \"10 anos de experiência\",\n  \"enderecoId\": null\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/prestadores/:id", "host": ["{{baseUrl}}"], "path": ["prestadores", ":id"], "variable": [{ "key": "id", "value": "" }] }
+          }
+        },
+        {
+          "name": "Ativar Prestador",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{baseUrl}}/prestadores/:id/ativar", "host": ["{{baseUrl}}"], "path": ["prestadores", ":id", "ativar"], "variable": [{ "key": "id", "value": "" }] }
+          }
+        },
+        {
+          "name": "Desativar Prestador",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{baseUrl}}/prestadores/:id/desativar", "host": ["{{baseUrl}}"], "path": ["prestadores", ":id", "desativar"], "variable": [{ "key": "id", "value": "" }] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Endereços",
+      "item": [
+        {
+          "name": "Criar Endereço",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"rua\": \"Rua das Flores\",\n  \"numero\": \"123\",\n  \"bairro\": \"Pinheiros\",\n  \"cidade\": \"São Paulo\",\n  \"estado\": \"SP\",\n  \"cep\": \"01420-001\",\n  \"complemento\": \"Apto 42\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/enderecos", "host": ["{{baseUrl}}"], "path": ["enderecos"] }
+          }
+        },
+        {
+          "name": "Listar Endereços",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{baseUrl}}/enderecos", "host": ["{{baseUrl}}"], "path": ["enderecos"] }
+          }
+        },
+        {
+          "name": "Buscar Endereço por ID",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{baseUrl}}/enderecos/:id", "host": ["{{baseUrl}}"], "path": ["enderecos", ":id"], "variable": [{ "key": "id", "value": "" }] }
+          }
+        },
+        {
+          "name": "Atualizar Endereço",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"rua\": \"Av. Paulista\",\n  \"numero\": \"1000\",\n  \"bairro\": \"Bela Vista\",\n  \"cidade\": \"São Paulo\",\n  \"estado\": \"SP\",\n  \"cep\": \"01310-100\",\n  \"complemento\": \"\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/enderecos/:id", "host": ["{{baseUrl}}"], "path": ["enderecos", ":id"], "variable": [{ "key": "id", "value": "" }] }
+          }
+        },
+        {
+          "name": "Deletar Endereço",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{baseUrl}}/enderecos/:id", "host": ["{{baseUrl}}"], "path": ["enderecos", ":id"], "variable": [{ "key": "id", "value": "" }] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Categorias de Serviço",
+      "item": [
+        {
+          "name": "Criar Categoria",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"Limpeza\",\n  \"descricao\": \"Serviços de limpeza residencial e comercial\",\n  \"ativa\": true\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/categorias", "host": ["{{baseUrl}}"], "path": ["categorias"] }
+          }
+        },
+        {
+          "name": "Listar Categorias",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{baseUrl}}/categorias", "host": ["{{baseUrl}}"], "path": ["categorias"] }
+          }
+        },
+        {
+          "name": "Listar Categorias Ativas",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{baseUrl}}/categorias/ativas", "host": ["{{baseUrl}}"], "path": ["categorias", "ativas"] }
+          }
+        },
+        {
+          "name": "Buscar Categoria por ID",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{baseUrl}}/categorias/:id", "host": ["{{baseUrl}}"], "path": ["categorias", ":id"], "variable": [{ "key": "id", "value": "" }] }
+          }
+        },
+        {
+          "name": "Atualizar Categoria",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"Limpeza Residencial\",\n  \"descricao\": \"Serviços de limpeza para residências\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/categorias/:id", "host": ["{{baseUrl}}"], "path": ["categorias", ":id"], "variable": [{ "key": "id", "value": "" }] }
+          }
+        },
+        {
+          "name": "Ativar Categoria",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{baseUrl}}/categorias/:id/ativar", "host": ["{{baseUrl}}"], "path": ["categorias", ":id", "ativar"], "variable": [{ "key": "id", "value": "" }] }
+          }
+        },
+        {
+          "name": "Desativar Categoria",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{baseUrl}}/categorias/:id/desativar", "host": ["{{baseUrl}}"], "path": ["categorias", ":id", "desativar"], "variable": [{ "key": "id", "value": "" }] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Serviços",
+      "item": [
+        {
+          "name": "Criar Serviço",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"Limpeza Completa\",\n  \"descricao\": \"Limpeza completa de apartamento\",\n  \"preco\": 150.00,\n  \"duracaoMinutos\": 180,\n  \"categoriaId\": \"<uuid-categoria>\",\n  \"prestadorId\": \"<uuid-prestador>\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/servicos", "host": ["{{baseUrl}}"], "path": ["servicos"] }
+          }
+        },
+        {
+          "name": "Listar Serviços por Prestador",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{baseUrl}}/servicos/prestador/:prestadorId", "host": ["{{baseUrl}}"], "path": ["servicos", "prestador", ":prestadorId"], "variable": [{ "key": "prestadorId", "value": "" }] }
+          }
+        },
+        {
+          "name": "Listar Serviços Ativos por Prestador",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{baseUrl}}/servicos/prestador/:prestadorId/ativos", "host": ["{{baseUrl}}"], "path": ["servicos", "prestador", ":prestadorId", "ativos"], "variable": [{ "key": "prestadorId", "value": "" }] }
+          }
+        },
+        {
+          "name": "Listar Serviços por Categoria",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{baseUrl}}/servicos/categoria/:categoriaId", "host": ["{{baseUrl}}"], "path": ["servicos", "categoria", ":categoriaId"], "variable": [{ "key": "categoriaId", "value": "" }] }
+          }
+        },
+        {
+          "name": "Buscar Serviço por ID",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{baseUrl}}/servicos/:id", "host": ["{{baseUrl}}"], "path": ["servicos", ":id"], "variable": [{ "key": "id", "value": "" }] }
+          }
+        },
+        {
+          "name": "Atualizar Serviço",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"Limpeza Completa Premium\",\n  \"descricao\": \"Limpeza premium com produtos incluídos\",\n  \"preco\": 200.00,\n  \"duracaoMinutos\": 240\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/servicos/:id", "host": ["{{baseUrl}}"], "path": ["servicos", ":id"], "variable": [{ "key": "id", "value": "" }] }
+          }
+        },
+        {
+          "name": "Ativar Serviço",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{baseUrl}}/servicos/:id/ativar", "host": ["{{baseUrl}}"], "path": ["servicos", ":id", "ativar"], "variable": [{ "key": "id", "value": "" }] }
+          }
+        },
+        {
+          "name": "Desativar Serviço",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{baseUrl}}/servicos/:id/desativar", "host": ["{{baseUrl}}"], "path": ["servicos", ":id", "desativar"], "variable": [{ "key": "id", "value": "" }] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Disponibilidades",
+      "item": [
+        {
+          "name": "Criar Disponibilidade",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"diaSemana\": \"MONDAY\",\n  \"horaInicio\": \"08:00:00\",\n  \"horaFim\": \"17:00:00\",\n  \"ativa\": true\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/prestadores/:prestadorId/disponibilidades", "host": ["{{baseUrl}}"], "path": ["prestadores", ":prestadorId", "disponibilidades"], "variable": [{ "key": "prestadorId", "value": "" }] }
+          }
+        },
+        {
+          "name": "Listar Disponibilidades do Prestador",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{baseUrl}}/prestadores/:prestadorId/disponibilidades", "host": ["{{baseUrl}}"], "path": ["prestadores", ":prestadorId", "disponibilidades"], "variable": [{ "key": "prestadorId", "value": "" }] }
+          }
+        },
+        {
+          "name": "Editar Disponibilidade",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"diaSemana\": \"MONDAY\",\n  \"horaInicio\": \"09:00:00\",\n  \"horaFim\": \"18:00:00\",\n  \"ativa\": true\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/prestadores/:prestadorId/disponibilidades/:id", "host": ["{{baseUrl}}"], "path": ["prestadores", ":prestadorId", "disponibilidades", ":id"], "variable": [{ "key": "prestadorId", "value": "" }, { "key": "id", "value": "" }] }
+          }
+        },
+        {
+          "name": "Deletar Disponibilidade",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{baseUrl}}/prestadores/:prestadorId/disponibilidades/:id", "host": ["{{baseUrl}}"], "path": ["prestadores", ":prestadorId", "disponibilidades", ":id"], "variable": [{ "key": "prestadorId", "value": "" }, { "key": "id", "value": "" }] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Agendamentos",
+      "item": [
+        {
+          "name": "Criar Agendamento",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"clienteId\": \"<uuid-cliente>\",\n  \"prestadorId\": \"<uuid-prestador>\",\n  \"servicoId\": \"<uuid-servico>\",\n  \"dataHoraInicio\": \"2025-12-20T10:00:00\",\n  \"observacaoCliente\": \"Prefiro produtos sem cheiro forte\",\n  \"metodoPagamento\": \"PIX\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/agendamentos", "host": ["{{baseUrl}}"], "path": ["agendamentos"] }
+          }
+        },
+        {
+          "name": "Listar Agendamentos",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{baseUrl}}/agendamentos", "host": ["{{baseUrl}}"], "path": ["agendamentos"] }
+          }
+        },
+        {
+          "name": "Buscar Agendamento por ID",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{baseUrl}}/agendamentos/:id", "host": ["{{baseUrl}}"], "path": ["agendamentos", ":id"], "variable": [{ "key": "id", "value": "" }] }
+          }
+        },
+        {
+          "name": "Listar por Cliente",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{baseUrl}}/agendamentos/cliente/:clienteId", "host": ["{{baseUrl}}"], "path": ["agendamentos", "cliente", ":clienteId"], "variable": [{ "key": "clienteId", "value": "" }] }
+          }
+        },
+        {
+          "name": "Listar por Prestador",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{baseUrl}}/agendamentos/prestador/:prestadorId", "host": ["{{baseUrl}}"], "path": ["agendamentos", "prestador", ":prestadorId"], "variable": [{ "key": "prestadorId", "value": "" }] }
+          }
+        },
+        {
+          "name": "Listar por Prestador e Status",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": {
+              "raw": "{{baseUrl}}/agendamentos/prestador/:prestadorId/status/:status",
+              "host": ["{{baseUrl}}"],
+              "path": ["agendamentos", "prestador", ":prestadorId", "status", ":status"],
+              "variable": [
+                { "key": "prestadorId", "value": "" },
+                { "key": "status", "value": "PENDENTE", "description": "PENDENTE | CONFIRMADO | RECUSADO | CANCELADO | CONCLUIDO" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Confirmar Agendamento",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{baseUrl}}/agendamentos/:id/confirmar", "host": ["{{baseUrl}}"], "path": ["agendamentos", ":id", "confirmar"], "variable": [{ "key": "id", "value": "" }] }
+          }
+        },
+        {
+          "name": "Recusar Agendamento",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{baseUrl}}/agendamentos/:id/recusar", "host": ["{{baseUrl}}"], "path": ["agendamentos", ":id", "recusar"], "variable": [{ "key": "id", "value": "" }] }
+          }
+        },
+        {
+          "name": "Cancelar Agendamento",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{baseUrl}}/agendamentos/:id/cancelar", "host": ["{{baseUrl}}"], "path": ["agendamentos", ":id", "cancelar"], "variable": [{ "key": "id", "value": "" }] }
+          }
+        },
+        {
+          "name": "Concluir Agendamento",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{baseUrl}}/agendamentos/:id/concluir", "host": ["{{baseUrl}}"], "path": ["agendamentos", ":id", "concluir"], "variable": [{ "key": "id", "value": "" }] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Pagamentos",
+      "item": [
+        {
+          "name": "Criar Pagamento",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"agendamentoId\": \"<uuid-agendamento>\",\n  \"metodo\": \"PIX\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/pagamentos", "host": ["{{baseUrl}}"], "path": ["pagamentos"] }
+          }
+        },
+        {
+          "name": "Listar Pagamentos",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{baseUrl}}/pagamentos", "host": ["{{baseUrl}}"], "path": ["pagamentos"] }
+          }
+        },
+        {
+          "name": "Buscar Pagamento por ID",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{baseUrl}}/pagamentos/:id", "host": ["{{baseUrl}}"], "path": ["pagamentos", ":id"], "variable": [{ "key": "id", "value": "" }] }
+          }
+        },
+        {
+          "name": "Buscar Pagamento por Agendamento",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{baseUrl}}/pagamentos/agendamento/:agendamentoId", "host": ["{{baseUrl}}"], "path": ["pagamentos", "agendamento", ":agendamentoId"], "variable": [{ "key": "agendamentoId", "value": "" }] }
+          }
+        },
+        {
+          "name": "Listar por Status",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": {
+              "raw": "{{baseUrl}}/pagamentos/status/:status",
+              "host": ["{{baseUrl}}"],
+              "path": ["pagamentos", "status", ":status"],
+              "variable": [{ "key": "status", "value": "PENDENTE", "description": "PENDENTE | PAGO | CANCELADO | REEMBOLSADO" }]
+            }
+          }
+        },
+        {
+          "name": "Marcar como Pago",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{baseUrl}}/pagamentos/:id/pagar", "host": ["{{baseUrl}}"], "path": ["pagamentos", ":id", "pagar"], "variable": [{ "key": "id", "value": "" }] }
+          }
+        },
+        {
+          "name": "Cancelar Pagamento",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{baseUrl}}/pagamentos/:id/cancelar", "host": ["{{baseUrl}}"], "path": ["pagamentos", ":id", "cancelar"], "variable": [{ "key": "id", "value": "" }] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Avaliações",
+      "item": [
+        {
+          "name": "Criar Avaliação",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"clienteId\": \"<uuid-cliente>\",\n  \"prestadorId\": \"<uuid-prestador>\",\n  \"agendamentoId\": \"<uuid-agendamento>\",\n  \"nota\": 5,\n  \"comentario\": \"Excelente serviço, muito pontual!\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/avaliacoes", "host": ["{{baseUrl}}"], "path": ["avaliacoes"] }
+          }
+        },
+        {
+          "name": "Listar Avaliações",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{baseUrl}}/avaliacoes", "host": ["{{baseUrl}}"], "path": ["avaliacoes"] }
+          }
+        },
+        {
+          "name": "Buscar Avaliação por ID",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{baseUrl}}/avaliacoes/:id", "host": ["{{baseUrl}}"], "path": ["avaliacoes", ":id"], "variable": [{ "key": "id", "value": "" }] }
+          }
+        },
+        {
+          "name": "Deletar Avaliação",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{baseUrl}}/avaliacoes/:id", "host": ["{{baseUrl}}"], "path": ["avaliacoes", ":id"], "variable": [{ "key": "id", "value": "" }] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Favoritos",
+      "item": [
+        {
+          "name": "Favoritar Prestador",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"clienteId\": \"<uuid-cliente>\",\n  \"prestadorId\": \"<uuid-prestador>\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/favoritos", "host": ["{{baseUrl}}"], "path": ["favoritos"] }
+          }
+        },
+        {
+          "name": "Listar Favoritos",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{baseUrl}}/favoritos", "host": ["{{baseUrl}}"], "path": ["favoritos"] }
+          }
+        },
+        {
+          "name": "Buscar Favorito por ID",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{baseUrl}}/favoritos/:id", "host": ["{{baseUrl}}"], "path": ["favoritos", ":id"], "variable": [{ "key": "id", "value": "" }] }
+          }
+        },
+        {
+          "name": "Remover Favorito",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{baseUrl}}/favoritos/:id", "host": ["{{baseUrl}}"], "path": ["favoritos", ":id"], "variable": [{ "key": "id", "value": "" }] }
+          }
+        }
+      ]
+    }
+  ]
+}

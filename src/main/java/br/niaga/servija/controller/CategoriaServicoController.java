@@ -7,6 +7,7 @@ import br.niaga.servija.service.CategoriaServicoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import jakarta.validation.Valid;
 
 import java.util.List;
 import java.util.UUID;
@@ -19,7 +20,7 @@ public class CategoriaServicoController {
     private final CategoriaServicoService categoriaServicoService;
 
     @PostMapping
-    public ResponseEntity<ResponseCategoriaServicoDTO> criar(@RequestBody SaveCategoriaServicoDTO dto) {
+    public ResponseEntity<ResponseCategoriaServicoDTO> criar(@Valid @RequestBody SaveCategoriaServicoDTO dto) {
         return ResponseEntity.status(201).body(categoriaServicoService.criar(dto));
     }
 
@@ -40,7 +41,7 @@ public class CategoriaServicoController {
 
     @PutMapping("/{id}")
     public ResponseEntity<ResponseCategoriaServicoDTO> atualizar(@PathVariable UUID id,
-                                                                 @RequestBody EditCategoriaServicoDTO dto) {
+                                                                 @Valid @RequestBody EditCategoriaServicoDTO dto) {
         return ResponseEntity.ok(categoriaServicoService.atualizar(id, dto));
     }
 

@@ -14,10 +14,11 @@ import java.util.UUID;
 @Setter
 @NoArgsConstructor
 @Entity
+@Table(name = "disponibilidades")
 public class Disponibilidade {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
     @ManyToOne

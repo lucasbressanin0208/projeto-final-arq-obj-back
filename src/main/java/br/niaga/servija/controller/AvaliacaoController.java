@@ -6,6 +6,7 @@ import br.niaga.servija.service.AvaliacaoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import jakarta.validation.Valid;
 
 import java.util.List;
 import java.util.UUID;
@@ -18,7 +19,7 @@ public class AvaliacaoController {
     private final AvaliacaoService avaliacaoService;
 
     @PostMapping
-    public ResponseEntity<ResponseAvaliacaoDTO> criar(@RequestBody SaveAvaliacaoDTO dto) {
+    public ResponseEntity<ResponseAvaliacaoDTO> criar(@Valid @RequestBody SaveAvaliacaoDTO dto) {
         return ResponseEntity.status(201).body(avaliacaoService.criar(dto));
     }
 

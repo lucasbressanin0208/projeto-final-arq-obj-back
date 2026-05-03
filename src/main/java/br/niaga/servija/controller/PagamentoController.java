@@ -7,6 +7,7 @@ import br.niaga.servija.service.PagamentoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import jakarta.validation.Valid;
 
 import java.util.List;
 import java.util.UUID;
@@ -19,7 +20,7 @@ public class PagamentoController {
     private final PagamentoService pagamentoService;
 
     @PostMapping
-    public ResponseEntity<ResponsePagamentoDTO> criar(@RequestBody SavePagamentoDTO dto) {
+    public ResponseEntity<ResponsePagamentoDTO> criar(@Valid @RequestBody SavePagamentoDTO dto) {
         return ResponseEntity.status(201).body(pagamentoService.criar(dto));
     }
 

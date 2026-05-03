@@ -7,6 +7,7 @@ import br.niaga.servija.service.ClienteService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import jakarta.validation.Valid;
 
 import java.util.List;
 import java.util.UUID;
@@ -19,7 +20,7 @@ public class ClienteController {
     private final ClienteService clienteService;
 
     @PostMapping
-    public ResponseEntity<ResponseClienteDTO> criar(@RequestBody SaveClienteDTO dto) {
+    public ResponseEntity<ResponseClienteDTO> criar(@Valid @RequestBody SaveClienteDTO dto) {
         return ResponseEntity.status(201).body(clienteService.criar(dto));
     }
 
@@ -35,7 +36,7 @@ public class ClienteController {
 
     @PutMapping("/{id}")
     public ResponseEntity<ResponseClienteDTO> atualizar(@PathVariable UUID id,
-                                                        @RequestBody EditClienteDTO dto) {
+                                                        @Valid @RequestBody EditClienteDTO dto) {
         return ResponseEntity.ok(clienteService.atualizar(id, dto));
     }
 

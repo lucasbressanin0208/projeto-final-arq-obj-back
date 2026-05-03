@@ -7,6 +7,7 @@ import br.niaga.servija.service.AgendamentoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import jakarta.validation.Valid;
 
 import java.util.List;
 import java.util.UUID;
@@ -19,7 +20,7 @@ public class AgendamentoController {
     private final AgendamentoService agendamentoService;
 
     @PostMapping
-    public ResponseEntity<ResponseAgendamentoDTO> criar(@RequestBody SaveAgendamentoDTO dto) {
+    public ResponseEntity<ResponseAgendamentoDTO> criar(@Valid @RequestBody SaveAgendamentoDTO dto) {
         return ResponseEntity.status(201).body(agendamentoService.criar(dto));
     }
 

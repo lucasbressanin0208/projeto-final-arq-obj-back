@@ -7,6 +7,7 @@ import br.niaga.servija.service.PrestadorService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import jakarta.validation.Valid;
 
 import java.util.List;
 import java.util.UUID;
@@ -19,7 +20,7 @@ public class PrestadorController {
     private final PrestadorService prestadorService;
 
     @PostMapping
-    public ResponseEntity<ResponsePrestadorDTO> criar(@RequestBody SavePrestadorDTO dto) {
+    public ResponseEntity<ResponsePrestadorDTO> criar(@Valid @RequestBody SavePrestadorDTO dto) {
         return ResponseEntity.status(201).body(prestadorService.criar(dto));
     }
 
@@ -51,7 +52,7 @@ public class PrestadorController {
 
     @PutMapping("/{id}")
     public ResponseEntity<ResponsePrestadorDTO> atualizar(@PathVariable UUID id,
-                                                          @RequestBody EditPrestadorDTO dto) {
+                                                          @Valid @RequestBody EditPrestadorDTO dto) {
         return ResponseEntity.ok(prestadorService.atualizar(id, dto));
     }
 

@@ -1,6 +1,8 @@
 package br.niaga.servija.dto.save;
 
 import br.niaga.servija.models.Cliente;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -8,10 +10,19 @@ import lombok.Setter;
 @Setter
 public class SaveClienteDTO {
 
+    @NotBlank
     private String nome;
+
+    @NotBlank
+    @Email
     private String email;
+
+    @NotBlank
     private String senha;
+
+    @NotBlank
     private String telefone;
+
     private String cpf;
 
     public Cliente toModel() {

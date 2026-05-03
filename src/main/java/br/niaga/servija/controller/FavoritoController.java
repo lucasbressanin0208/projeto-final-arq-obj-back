@@ -6,6 +6,7 @@ import br.niaga.servija.service.FavoritoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import jakarta.validation.Valid;
 
 import java.util.List;
 import java.util.UUID;
@@ -18,7 +19,7 @@ public class FavoritoController {
     private final FavoritoService favoritoService;
 
     @PostMapping
-    public ResponseEntity<ResponseFavoritoDTO> criar(@RequestBody SaveFavoritoDTO dto) {
+    public ResponseEntity<ResponseFavoritoDTO> criar(@Valid @RequestBody SaveFavoritoDTO dto) {
         return ResponseEntity.status(201).body(favoritoService.criar(dto));
     }
 
