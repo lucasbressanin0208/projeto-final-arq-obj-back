@@ -3,6 +3,7 @@ package br.niaga.servija.controller;
 import br.niaga.servija.dto.response.TokenResponseDTO;
 import br.niaga.servija.dto.save.LoginDTO;
 import br.niaga.servija.service.AuthService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
