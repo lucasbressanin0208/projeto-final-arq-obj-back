@@ -8,11 +8,12 @@ import br.niaga.servija.models.Prestador;
 import br.niaga.servija.repository.EnderecoRepository;
 import br.niaga.servija.repository.PrestadorRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -20,12 +21,16 @@ public class PrestadorService {
 
     private final PrestadorRepository prestadorRepository;
     private final EnderecoRepository enderecoRepository;
+    private final PasswordEncoder passwordEncoder;
 
     public ResponsePrestadorDTO criar(SavePrestadorDTO dto) {
         if (prestadorRepository.existsByEmail(dto.getEmail())) {
             throw new IllegalArgumentException("Email já cadastrado");
         }
         Prestador prestador = dto.toModel();
+        prestador.setSenha(passwordEncoder.encode(dto.getSenha()));
+        prestador.setNotaMedia(BigDecimal.ZERO);
+        prestador.setAtivo(true);
         if (dto.getEnderecoId() != null) {
             Endereco endereco = enderecoRepository.findById(dto.getEnderecoId())
                     .orElseThrow(() -> new RuntimeException("Endereço não encontrado"));
@@ -37,25 +42,25 @@ public class PrestadorService {
     public List<ResponsePrestadorDTO> listarTodos() {
         return prestadorRepository.findAll().stream()
                 .map(ResponsePrestadorDTO::toDTO)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     public List<ResponsePrestadorDTO> listarAtivos() {
         return prestadorRepository.findAllByAtivoTrue().stream()
                 .map(ResponsePrestadorDTO::toDTO)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     public List<ResponsePrestadorDTO> buscarPorCidade(String cidade) {
         return prestadorRepository.findAllByEnderecoCidadeIgnoreCaseAndAtivoTrue(cidade).stream()
                 .map(ResponsePrestadorDTO::toDTO)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     public List<ResponsePrestadorDTO> buscarPorCidadeEBairro(String cidade, String bairro) {
         return prestadorRepository.findAllByEnderecoCidadeIgnoreCaseAndEnderecoBairroIgnoreCaseAndAtivoTrue(cidade, bairro).stream()
                 .map(ResponsePrestadorDTO::toDTO)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     public ResponsePrestadorDTO buscarPorId(UUID id) {
@@ -66,7 +71,9 @@ public class PrestadorService {
         Prestador prestador = buscarOuFalhar(id);
         prestador.setNome(dto.getNome());
         prestador.setEmail(dto.getEmail());
-        prestador.setSenha(dto.getSenha());
+        if (dto.getSenha() != null && !dto.getSenha().isBlank()) {
+            prestador.setSenha(passwordEncoder.encode(dto.getSenha()));
+        }
         prestador.setTelefone(dto.getTelefone());
         prestador.setDescricao(dto.getDescricao());
         if (dto.getEnderecoId() != null) {

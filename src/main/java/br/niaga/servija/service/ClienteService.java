@@ -6,17 +6,18 @@ import br.niaga.servija.dto.save.SaveClienteDTO;
 import br.niaga.servija.models.Cliente;
 import br.niaga.servija.repository.ClienteRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class ClienteService {
 
     private final ClienteRepository clienteRepository;
+    private final PasswordEncoder passwordEncoder;
 
     public ResponseClienteDTO criar(SaveClienteDTO dto) {
         if (clienteRepository.existsByEmail(dto.getEmail())) {
@@ -26,13 +27,14 @@ public class ClienteService {
             throw new IllegalArgumentException("CPF já cadastrado");
         }
         Cliente cliente = dto.toModel();
+        cliente.setSenha(passwordEncoder.encode(dto.getSenha()));
         return ResponseClienteDTO.toDTO(clienteRepository.save(cliente));
     }
 
     public List<ResponseClienteDTO> listarTodos() {
         return clienteRepository.findAll().stream()
                 .map(ResponseClienteDTO::toDTO)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     public ResponseClienteDTO buscarPorId(UUID id) {
@@ -43,7 +45,9 @@ public class ClienteService {
         Cliente cliente = buscarOuFalhar(id);
         cliente.setNome(dto.getNome());
         cliente.setEmail(dto.getEmail());
-        cliente.setSenha(dto.getSenha());
+        if (dto.getSenha() != null && !dto.getSenha().isBlank()) {
+            cliente.setSenha(passwordEncoder.encode(dto.getSenha()));
+        }
         cliente.setTelefone(dto.getTelefone());
         cliente.setCpf(dto.getCpf());
         return ResponseClienteDTO.toDTO(clienteRepository.save(cliente));

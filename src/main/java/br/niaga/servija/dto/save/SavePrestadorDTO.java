@@ -4,7 +4,6 @@ import br.niaga.servija.models.Prestador;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.math.BigDecimal;
 import java.util.UUID;
 
 @Getter
@@ -25,8 +24,6 @@ public class SavePrestadorDTO {
         p.setSenha(this.senha);
         p.setTelefone(this.telefone);
         p.setDescricao(this.descricao);
-        p.setNotaMedia(BigDecimal.ZERO);
-        p.setAtivo(true);
         return p;
     }
 }

@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 public class DisponibilidadeService {
@@ -46,7 +45,7 @@ public class DisponibilidadeService {
         return repository.findByPrestador(prestador)
                 .stream()
                 .map(ResponseDisponibilidadeDTO::toDTO)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     // update

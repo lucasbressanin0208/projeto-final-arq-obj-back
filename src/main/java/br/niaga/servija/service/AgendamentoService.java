@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -82,25 +81,25 @@ public class AgendamentoService {
     public List<ResponseAgendamentoDTO> listarTodos() {
         return agendamentoRepository.findAll().stream()
                 .map(ResponseAgendamentoDTO::toDTO)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     public List<ResponseAgendamentoDTO> listarPorCliente(UUID clienteId) {
         return agendamentoRepository.findAllByClienteId(clienteId).stream()
                 .map(ResponseAgendamentoDTO::toDTO)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     public List<ResponseAgendamentoDTO> listarPorPrestador(UUID prestadorId) {
         return agendamentoRepository.findAllByPrestadorId(prestadorId).stream()
                 .map(ResponseAgendamentoDTO::toDTO)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     public List<ResponseAgendamentoDTO> listarPorPrestadorEStatus(UUID prestadorId, StatusAgendamento status) {
         return agendamentoRepository.findAllByPrestadorIdAndStatus(prestadorId, status).stream()
                 .map(ResponseAgendamentoDTO::toDTO)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     public ResponseAgendamentoDTO buscarPorId(UUID id) {

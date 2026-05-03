@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 public class EnderecoService {
@@ -34,7 +33,7 @@ public class EnderecoService {
         return repository.findAll()
                 .stream()
                 .map(ResponseEnderecoDTO::toDTO)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     // get por id

@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -60,19 +59,19 @@ public class ServicoService {
     public List<ResponseServicoDTO> listarPorPrestador(UUID prestadorId) {
         return servicoRepository.findAllByPrestadorId(prestadorId).stream()
                 .map(ResponseServicoDTO::toDTO)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     public List<ResponseServicoDTO> listarAtivosPorPrestador(UUID prestadorId) {
         return servicoRepository.findAllByPrestadorIdAndAtivoTrue(prestadorId).stream()
                 .map(ResponseServicoDTO::toDTO)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     public List<ResponseServicoDTO> listarPorCategoria(UUID categoriaId) {
         return servicoRepository.findAllByCategoriaId(categoriaId).stream()
                 .map(ResponseServicoDTO::toDTO)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     public ResponseServicoDTO buscarPorId(UUID id) {

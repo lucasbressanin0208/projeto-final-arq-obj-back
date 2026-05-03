@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -43,7 +42,7 @@ public class FavoritoService {
     public List<ResponseFavoritoDTO> listarTodos() {
         return favoritoRepository.findAll().stream()
                 .map(ResponseFavoritoDTO::toDTO)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     public ResponseFavoritoDTO buscarPorId(UUID id) {
