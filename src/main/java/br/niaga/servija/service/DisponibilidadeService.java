@@ -1,8 +1,8 @@
 package br.niaga.servija.service;
 
-import br.niaga.servija.dto.EditDisponibilidadeDTO;
-import br.niaga.servija.dto.ResponseDisponibilidadeDTO;
-import br.niaga.servija.dto.SaveDisponibilidadeDTO;
+import br.niaga.servija.dto.edit.EditDisponibilidadeDTO;
+import br.niaga.servija.dto.response.ResponseDisponibilidadeDTO;
+import br.niaga.servija.dto.save.SaveDisponibilidadeDTO;
 import br.niaga.servija.models.Disponibilidade;
 import br.niaga.servija.models.Prestador;
 import br.niaga.servija.repository.DisponibilidadeRepository;

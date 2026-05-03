@@ -1,8 +1,8 @@
 package br.niaga.servija.service;
 
-import br.niaga.servija.dto.EditPrestadorDTO;
-import br.niaga.servija.dto.ResponsePrestadorDTO;
-import br.niaga.servija.dto.SavePrestadorDTO;
+import br.niaga.servija.dto.edit.EditPrestadorDTO;
+import br.niaga.servija.dto.response.ResponsePrestadorDTO;
+import br.niaga.servija.dto.save.SavePrestadorDTO;
 import br.niaga.servija.models.Endereco;
 import br.niaga.servija.models.Prestador;
 import br.niaga.servija.repository.EnderecoRepository;

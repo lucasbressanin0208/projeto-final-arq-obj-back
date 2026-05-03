@@ -1,7 +1,7 @@
 package br.niaga.servija.controller;
 
-import br.niaga.servija.dto.ResponseFavoritoDTO;
-import br.niaga.servija.dto.SaveFavoritoDTO;
+import br.niaga.servija.dto.response.ResponseFavoritoDTO;
+import br.niaga.servija.dto.save.SaveFavoritoDTO;
 import br.niaga.servija.service.FavoritoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

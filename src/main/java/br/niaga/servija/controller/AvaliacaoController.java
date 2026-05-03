@@ -1,7 +1,7 @@
 package br.niaga.servija.controller;
 
-import br.niaga.servija.dto.ResponseAvaliacaoDTO;
-import br.niaga.servija.dto.SaveAvaliacaoDTO;
+import br.niaga.servija.dto.response.ResponseAvaliacaoDTO;
+import br.niaga.servija.dto.save.SaveAvaliacaoDTO;
 import br.niaga.servija.service.AvaliacaoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

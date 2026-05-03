@@ -1,8 +1,8 @@
 package br.niaga.servija.controller;
 
-import br.niaga.servija.dto.EditPrestadorDTO;
-import br.niaga.servija.dto.ResponsePrestadorDTO;
-import br.niaga.servija.dto.SavePrestadorDTO;
+import br.niaga.servija.dto.edit.EditPrestadorDTO;
+import br.niaga.servija.dto.response.ResponsePrestadorDTO;
+import br.niaga.servija.dto.save.SavePrestadorDTO;
 import br.niaga.servija.service.PrestadorService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

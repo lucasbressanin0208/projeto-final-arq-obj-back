@@ -1,7 +1,7 @@
 package br.niaga.servija.controller;
 
-import br.niaga.servija.dto.ResponsePagamentoDTO;
-import br.niaga.servija.dto.SavePagamentoDTO;
+import br.niaga.servija.dto.response.ResponsePagamentoDTO;
+import br.niaga.servija.dto.save.SavePagamentoDTO;
 import br.niaga.servija.models.StatusPagamento;
 import br.niaga.servija.service.PagamentoService;
 import lombok.RequiredArgsConstructor;

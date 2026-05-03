@@ -1,7 +1,7 @@
 package br.niaga.servija.service;
 
-import br.niaga.servija.dto.ResponseAgendamentoDTO;
-import br.niaga.servija.dto.SaveAgendamentoDTO;
+import br.niaga.servija.dto.response.ResponseAgendamentoDTO;
+import br.niaga.servija.dto.save.SaveAgendamentoDTO;
 import br.niaga.servija.models.*;
 import br.niaga.servija.repository.AgendamentoRepository;
 import br.niaga.servija.repository.ServicoRepository;

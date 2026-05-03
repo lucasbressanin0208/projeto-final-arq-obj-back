@@ -1,7 +1,7 @@
 package br.niaga.servija.controller;
 
-import br.niaga.servija.dto.ResponseAgendamentoDTO;
-import br.niaga.servija.dto.SaveAgendamentoDTO;
+import br.niaga.servija.dto.response.ResponseAgendamentoDTO;
+import br.niaga.servija.dto.save.SaveAgendamentoDTO;
 import br.niaga.servija.models.StatusAgendamento;
 import br.niaga.servija.service.AgendamentoService;
 import lombok.RequiredArgsConstructor;

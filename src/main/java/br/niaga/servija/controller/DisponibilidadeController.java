@@ -1,8 +1,8 @@
 package br.niaga.servija.controller;
 
-import br.niaga.servija.dto.EditDisponibilidadeDTO;
-import br.niaga.servija.dto.ResponseDisponibilidadeDTO;
-import br.niaga.servija.dto.SaveDisponibilidadeDTO;
+import br.niaga.servija.dto.edit.EditDisponibilidadeDTO;
+import br.niaga.servija.dto.response.ResponseDisponibilidadeDTO;
+import br.niaga.servija.dto.save.SaveDisponibilidadeDTO;
 import br.niaga.servija.service.DisponibilidadeService;
 import org.springframework.web.bind.annotation.*;
 

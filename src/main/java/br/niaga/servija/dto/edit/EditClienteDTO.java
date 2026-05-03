@@ -1,18 +1,15 @@
-package br.niaga.servija.dto;
+package br.niaga.servija.dto.edit;
 
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.UUID;
-
 @Getter
 @Setter
-public class EditPrestadorDTO {
+public class EditClienteDTO {
 
     private String nome;
     private String email;
     private String senha;
     private String telefone;
-    private String descricao;
-    private UUID enderecoId;
+    private String cpf;
 }

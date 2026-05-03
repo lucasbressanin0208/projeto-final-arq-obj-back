@@ -1,7 +1,7 @@
 package br.niaga.servija.service;
 
-import br.niaga.servija.dto.ResponseFavoritoDTO;
-import br.niaga.servija.dto.SaveFavoritoDTO;
+import br.niaga.servija.dto.response.ResponseFavoritoDTO;
+import br.niaga.servija.dto.save.SaveFavoritoDTO;
 import br.niaga.servija.models.*;
 import br.niaga.servija.repository.*;
 import lombok.RequiredArgsConstructor;

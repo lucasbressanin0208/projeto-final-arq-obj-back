@@ -1,7 +1,7 @@
 package br.niaga.servija.service;
 
-import br.niaga.servija.dto.ResponsePagamentoDTO;
-import br.niaga.servija.dto.SavePagamentoDTO;
+import br.niaga.servija.dto.response.ResponsePagamentoDTO;
+import br.niaga.servija.dto.save.SavePagamentoDTO;
 import br.niaga.servija.models.*;
 import br.niaga.servija.repository.AgendamentoRepository;
 import br.niaga.servija.repository.PagamentoRepository;

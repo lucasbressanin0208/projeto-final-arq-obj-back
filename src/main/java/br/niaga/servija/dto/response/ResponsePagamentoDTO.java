@@ -1,4 +1,4 @@
-package br.niaga.servija.dto;
+package br.niaga.servija.dto.response;
 
 import br.niaga.servija.models.MetodoPagamento;
 import br.niaga.servija.models.Pagamento;

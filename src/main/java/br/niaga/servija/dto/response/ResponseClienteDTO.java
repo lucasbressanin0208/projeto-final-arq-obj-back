@@ -1,4 +1,4 @@
-package br.niaga.servija.dto;
+package br.niaga.servija.dto.response;
 
 import br.niaga.servija.models.Cliente;
 import lombok.Getter;

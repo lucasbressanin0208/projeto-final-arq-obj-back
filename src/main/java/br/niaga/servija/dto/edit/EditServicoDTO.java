@@ -1,4 +1,4 @@
-package br.niaga.servija.dto;
+package br.niaga.servija.dto.edit;
 
 import lombok.Getter;
 import lombok.Setter;

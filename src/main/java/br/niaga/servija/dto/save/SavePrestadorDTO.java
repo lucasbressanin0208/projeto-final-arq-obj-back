@@ -1,4 +1,4 @@
-package br.niaga.servija.dto;
+package br.niaga.servija.dto.save;
 
 import br.niaga.servija.models.Prestador;
 import lombok.Getter;

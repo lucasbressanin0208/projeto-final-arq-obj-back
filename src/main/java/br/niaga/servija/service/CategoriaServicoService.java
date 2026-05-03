@@ -1,8 +1,8 @@
 package br.niaga.servija.service;
 
-import br.niaga.servija.dto.EditCategoriaServicoDTO;
-import br.niaga.servija.dto.ResponseCategoriaServicoDTO;
-import br.niaga.servija.dto.SaveCategoriaServicoDTO;
+import br.niaga.servija.dto.edit.EditCategoriaServicoDTO;
+import br.niaga.servija.dto.response.ResponseCategoriaServicoDTO;
+import br.niaga.servija.dto.save.SaveCategoriaServicoDTO;
 import br.niaga.servija.models.CategoriaServico;
 import br.niaga.servija.repository.CategoriaServicoRepository;
 import lombok.RequiredArgsConstructor;

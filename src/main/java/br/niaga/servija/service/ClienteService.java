@@ -1,8 +1,8 @@
 package br.niaga.servija.service;
 
-import br.niaga.servija.dto.EditClienteDTO;
-import br.niaga.servija.dto.ResponseClienteDTO;
-import br.niaga.servija.dto.SaveClienteDTO;
+import br.niaga.servija.dto.edit.EditClienteDTO;
+import br.niaga.servija.dto.response.ResponseClienteDTO;
+import br.niaga.servija.dto.save.SaveClienteDTO;
 import br.niaga.servija.models.Cliente;
 import br.niaga.servija.repository.ClienteRepository;
 import lombok.RequiredArgsConstructor;

@@ -1,8 +1,8 @@
 package br.niaga.servija.service;
 
-import br.niaga.servija.dto.EditServicoDTO;
-import br.niaga.servija.dto.ResponseServicoDTO;
-import br.niaga.servija.dto.SaveServicoDTO;
+import br.niaga.servija.dto.edit.EditServicoDTO;
+import br.niaga.servija.dto.response.ResponseServicoDTO;
+import br.niaga.servija.dto.save.SaveServicoDTO;
 import br.niaga.servija.models.CategoriaServico;
 import br.niaga.servija.models.Prestador;
 import br.niaga.servija.models.Servico;

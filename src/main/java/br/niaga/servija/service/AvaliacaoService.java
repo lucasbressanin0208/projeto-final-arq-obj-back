@@ -1,7 +1,7 @@
 package br.niaga.servija.service;
 
-import br.niaga.servija.dto.ResponseAvaliacaoDTO;
-import br.niaga.servija.dto.SaveAvaliacaoDTO;
+import br.niaga.servija.dto.response.ResponseAvaliacaoDTO;
+import br.niaga.servija.dto.save.SaveAvaliacaoDTO;
 import br.niaga.servija.models.*;
 import br.niaga.servija.repository.*;
 import lombok.RequiredArgsConstructor;
