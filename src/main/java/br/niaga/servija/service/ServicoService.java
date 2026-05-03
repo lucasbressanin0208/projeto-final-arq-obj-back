@@ -1,6 +1,8 @@
 package br.niaga.servija.service;
 
-import br.niaga.servija.dto.ServicoDTO;
+import br.niaga.servija.dto.EditServicoDTO;
+import br.niaga.servija.dto.ResponseServicoDTO;
+import br.niaga.servija.dto.SaveServicoDTO;
 import br.niaga.servija.models.CategoriaServico;
 import br.niaga.servija.models.Prestador;
 import br.niaga.servija.models.Servico;
@@ -11,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -19,7 +22,7 @@ public class ServicoService {
     private final ServicoRepository servicoRepository;
     private final CategoriaServicoRepository categoriaServicoRepository;
 
-    public Servico criar(ServicoDTO dto) {
+    public ResponseServicoDTO criar(SaveServicoDTO dto) {
         CategoriaServico categoria = categoriaServicoRepository.findById(dto.getCategoriaId())
                 .orElseThrow(() -> new RuntimeException("Categoria não encontrada"));
 
@@ -39,9 +42,7 @@ public class ServicoService {
             throw new IllegalArgumentException("Duração deve ser maior que zero");
         }
 
-        Prestador prestador = Prestador.builder()
-                .id(dto.getPrestadorId())
-                .build();
+        Prestador prestador = Prestador.builder().id(dto.getPrestadorId()).build();
 
         Servico servico = Servico.builder()
                 .nome(dto.getNome())
@@ -53,46 +54,54 @@ public class ServicoService {
                 .prestador(prestador)
                 .build();
 
-        return servicoRepository.save(servico);
+        return ResponseServicoDTO.toDTO(servicoRepository.save(servico));
     }
 
-    public List<Servico> listarPorPrestador(UUID prestadorId) {
-        return servicoRepository.findAllByPrestadorId(prestadorId);
+    public List<ResponseServicoDTO> listarPorPrestador(UUID prestadorId) {
+        return servicoRepository.findAllByPrestadorId(prestadorId).stream()
+                .map(ResponseServicoDTO::toDTO)
+                .collect(Collectors.toList());
     }
 
-    public List<Servico> listarAtivosPorPrestador(UUID prestadorId) {
-        return servicoRepository.findAllByPrestadorIdAndAtivoTrue(prestadorId);
+    public List<ResponseServicoDTO> listarAtivosPorPrestador(UUID prestadorId) {
+        return servicoRepository.findAllByPrestadorIdAndAtivoTrue(prestadorId).stream()
+                .map(ResponseServicoDTO::toDTO)
+                .collect(Collectors.toList());
     }
 
-    public List<Servico> listarPorCategoria(UUID categoriaId) {
-        return servicoRepository.findAllByCategoriaId(categoriaId);
+    public List<ResponseServicoDTO> listarPorCategoria(UUID categoriaId) {
+        return servicoRepository.findAllByCategoriaId(categoriaId).stream()
+                .map(ResponseServicoDTO::toDTO)
+                .collect(Collectors.toList());
     }
 
-    public Servico buscarPorId(UUID id) {
-        return servicoRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Serviço não encontrado"));
+    public ResponseServicoDTO buscarPorId(UUID id) {
+        return ResponseServicoDTO.toDTO(buscarOuFalhar(id));
     }
 
-    public Servico atualizar(UUID id, ServicoDTO dto) {
-        Servico servico = buscarPorId(id);
-
+    public ResponseServicoDTO atualizar(UUID id, EditServicoDTO dto) {
+        Servico servico = buscarOuFalhar(id);
         servico.setNome(dto.getNome());
         servico.setDescricao(dto.getDescricao());
         servico.setPreco(dto.getPreco());
         servico.setDuracaoMinutos(dto.getDuracaoMinutos());
-
-        return servicoRepository.save(servico);
+        return ResponseServicoDTO.toDTO(servicoRepository.save(servico));
     }
 
     public void ativar(UUID id) {
-        Servico servico = buscarPorId(id);
+        Servico servico = buscarOuFalhar(id);
         servico.ativar();
         servicoRepository.save(servico);
     }
 
     public void desativar(UUID id) {
-        Servico servico = buscarPorId(id);
+        Servico servico = buscarOuFalhar(id);
         servico.desativar();
         servicoRepository.save(servico);
+    }
+
+    private Servico buscarOuFalhar(UUID id) {
+        return servicoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Serviço não encontrado"));
     }
 }

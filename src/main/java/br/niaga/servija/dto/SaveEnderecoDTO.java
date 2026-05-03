@@ -1,4 +1,4 @@
-package br.niaga.servija.dto.endereco;
+package br.niaga.servija.dto;
 
 import br.niaga.servija.models.Endereco;
 import lombok.Getter;

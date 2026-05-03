@@ -1,6 +1,8 @@
 package br.niaga.servija.service;
 
-import br.niaga.servija.dto.PrestadorDTO;
+import br.niaga.servija.dto.EditPrestadorDTO;
+import br.niaga.servija.dto.ResponsePrestadorDTO;
+import br.niaga.servija.dto.SavePrestadorDTO;
 import br.niaga.servija.models.Endereco;
 import br.niaga.servija.models.Prestador;
 import br.niaga.servija.repository.EnderecoRepository;
@@ -8,9 +10,9 @@ import br.niaga.servija.repository.PrestadorRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -19,81 +21,76 @@ public class PrestadorService {
     private final PrestadorRepository prestadorRepository;
     private final EnderecoRepository enderecoRepository;
 
-    public Prestador criar(PrestadorDTO dto) {
+    public ResponsePrestadorDTO criar(SavePrestadorDTO dto) {
         if (prestadorRepository.existsByEmail(dto.getEmail())) {
             throw new IllegalArgumentException("Email já cadastrado");
         }
-
-        Endereco endereco = null;
-
+        Prestador prestador = dto.toModel();
         if (dto.getEnderecoId() != null) {
-            endereco = enderecoRepository.findById(dto.getEnderecoId())
+            Endereco endereco = enderecoRepository.findById(dto.getEnderecoId())
                     .orElseThrow(() -> new RuntimeException("Endereço não encontrado"));
+            prestador.setEndereco(endereco);
         }
-
-        Prestador prestador = Prestador.builder()
-                .nome(dto.getNome())
-                .email(dto.getEmail())
-                .senha(dto.getSenha())
-                .telefone(dto.getTelefone())
-                .descricao(dto.getDescricao())
-                .notaMedia(BigDecimal.ZERO)
-                .ativo(true)
-                .endereco(endereco)
-                .build();
-
-        return prestadorRepository.save(prestador);
+        return ResponsePrestadorDTO.toDTO(prestadorRepository.save(prestador));
     }
 
-    public List<Prestador> listarTodos() {
-        return prestadorRepository.findAll();
+    public List<ResponsePrestadorDTO> listarTodos() {
+        return prestadorRepository.findAll().stream()
+                .map(ResponsePrestadorDTO::toDTO)
+                .collect(Collectors.toList());
     }
 
-    public List<Prestador> listarAtivos() {
-        return prestadorRepository.findAllByAtivoTrue();
+    public List<ResponsePrestadorDTO> listarAtivos() {
+        return prestadorRepository.findAllByAtivoTrue().stream()
+                .map(ResponsePrestadorDTO::toDTO)
+                .collect(Collectors.toList());
     }
 
-    public List<Prestador> buscarPorCidade(String cidade) {
-        return prestadorRepository.findAllByEnderecoCidadeIgnoreCaseAndAtivoTrue(cidade);
+    public List<ResponsePrestadorDTO> buscarPorCidade(String cidade) {
+        return prestadorRepository.findAllByEnderecoCidadeIgnoreCaseAndAtivoTrue(cidade).stream()
+                .map(ResponsePrestadorDTO::toDTO)
+                .collect(Collectors.toList());
     }
 
-    public List<Prestador> buscarPorCidadeEBairro(String cidade, String bairro) {
-        return prestadorRepository.findAllByEnderecoCidadeIgnoreCaseAndEnderecoBairroIgnoreCaseAndAtivoTrue(cidade, bairro);
+    public List<ResponsePrestadorDTO> buscarPorCidadeEBairro(String cidade, String bairro) {
+        return prestadorRepository.findAllByEnderecoCidadeIgnoreCaseAndEnderecoBairroIgnoreCaseAndAtivoTrue(cidade, bairro).stream()
+                .map(ResponsePrestadorDTO::toDTO)
+                .collect(Collectors.toList());
     }
 
-    public Prestador buscarPorId(UUID id) {
-        return prestadorRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Prestador não encontrado"));
+    public ResponsePrestadorDTO buscarPorId(UUID id) {
+        return ResponsePrestadorDTO.toDTO(buscarOuFalhar(id));
     }
 
-    public Prestador atualizar(UUID id, PrestadorDTO dto) {
-        Prestador prestador = buscarPorId(id);
-
+    public ResponsePrestadorDTO atualizar(UUID id, EditPrestadorDTO dto) {
+        Prestador prestador = buscarOuFalhar(id);
         prestador.setNome(dto.getNome());
         prestador.setEmail(dto.getEmail());
         prestador.setSenha(dto.getSenha());
         prestador.setTelefone(dto.getTelefone());
         prestador.setDescricao(dto.getDescricao());
-
         if (dto.getEnderecoId() != null) {
             Endereco endereco = enderecoRepository.findById(dto.getEnderecoId())
                     .orElseThrow(() -> new RuntimeException("Endereço não encontrado"));
-
             prestador.setEndereco(endereco);
         }
-
-        return prestadorRepository.save(prestador);
+        return ResponsePrestadorDTO.toDTO(prestadorRepository.save(prestador));
     }
 
     public void ativar(UUID id) {
-        Prestador prestador = buscarPorId(id);
+        Prestador prestador = buscarOuFalhar(id);
         prestador.ativar();
         prestadorRepository.save(prestador);
     }
 
     public void desativar(UUID id) {
-        Prestador prestador = buscarPorId(id);
+        Prestador prestador = buscarOuFalhar(id);
         prestador.desativar();
         prestadorRepository.save(prestador);
+    }
+
+    private Prestador buscarOuFalhar(UUID id) {
+        return prestadorRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Prestador não encontrado"));
     }
 }

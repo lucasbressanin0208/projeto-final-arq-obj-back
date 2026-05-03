@@ -1,8 +1,8 @@
 package br.niaga.servija.controller;
 
-import br.niaga.servija.dto.endereco.EditEnderecoDTO;
-import br.niaga.servija.dto.endereco.ResponseEnderecoDTO;
-import br.niaga.servija.dto.endereco.SaveEnderecoDTO;
+import br.niaga.servija.dto.EditEnderecoDTO;
+import br.niaga.servija.dto.ResponseEnderecoDTO;
+import br.niaga.servija.dto.SaveEnderecoDTO;
 import br.niaga.servija.service.EnderecoService;
 import org.springframework.web.bind.annotation.*;
 

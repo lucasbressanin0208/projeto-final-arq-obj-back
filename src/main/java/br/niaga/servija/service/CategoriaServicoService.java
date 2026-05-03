@@ -1,6 +1,8 @@
 package br.niaga.servija.service;
 
-import br.niaga.servija.dto.CategoriaServicoDTO;
+import br.niaga.servija.dto.EditCategoriaServicoDTO;
+import br.niaga.servija.dto.ResponseCategoriaServicoDTO;
+import br.niaga.servija.dto.SaveCategoriaServicoDTO;
 import br.niaga.servija.models.CategoriaServico;
 import br.niaga.servija.repository.CategoriaServicoRepository;
 import lombok.RequiredArgsConstructor;
@@ -8,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -15,51 +18,51 @@ public class CategoriaServicoService {
 
     private final CategoriaServicoRepository categoriaServicoRepository;
 
-    public CategoriaServico criar(CategoriaServicoDTO dto) {
+    public ResponseCategoriaServicoDTO criar(SaveCategoriaServicoDTO dto) {
         if (categoriaServicoRepository.existsByNomeIgnoreCase(dto.getNome())) {
             throw new IllegalArgumentException("Já existe uma categoria com esse nome");
         }
-
-        CategoriaServico categoria = CategoriaServico.builder()
-                .nome(dto.getNome())
-                .descricao(dto.getDescricao())
-                .ativa(dto.getAtiva())
-                .build();
-
-        return categoriaServicoRepository.save(categoria);
+        CategoriaServico categoria = dto.toModel();
+        return ResponseCategoriaServicoDTO.toDTO(categoriaServicoRepository.save(categoria));
     }
 
-    public List<CategoriaServico> listarTodas() {
-        return categoriaServicoRepository.findAll();
+    public List<ResponseCategoriaServicoDTO> listarTodas() {
+        return categoriaServicoRepository.findAll().stream()
+                .map(ResponseCategoriaServicoDTO::toDTO)
+                .collect(Collectors.toList());
     }
 
-    public List<CategoriaServico> listarAtivas() {
-        return categoriaServicoRepository.findAllByAtivaTrue();
+    public List<ResponseCategoriaServicoDTO> listarAtivas() {
+        return categoriaServicoRepository.findAllByAtivaTrue().stream()
+                .map(ResponseCategoriaServicoDTO::toDTO)
+                .collect(Collectors.toList());
     }
 
-    public CategoriaServico buscarPorId(UUID id) {
-        return categoriaServicoRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Categoria não encontrada"));
+    public ResponseCategoriaServicoDTO buscarPorId(UUID id) {
+        return ResponseCategoriaServicoDTO.toDTO(buscarOuFalhar(id));
     }
 
-    public CategoriaServico atualizar(UUID id, CategoriaServicoDTO dto) {
-        CategoriaServico categoria = buscarPorId(id);
-
+    public ResponseCategoriaServicoDTO atualizar(UUID id, EditCategoriaServicoDTO dto) {
+        CategoriaServico categoria = buscarOuFalhar(id);
         categoria.setNome(dto.getNome());
         categoria.setDescricao(dto.getDescricao());
-
-        return categoriaServicoRepository.save(categoria);
+        return ResponseCategoriaServicoDTO.toDTO(categoriaServicoRepository.save(categoria));
     }
 
     public void ativar(UUID id) {
-        CategoriaServico categoria = buscarPorId(id);
+        CategoriaServico categoria = buscarOuFalhar(id);
         categoria.setAtiva(true);
         categoriaServicoRepository.save(categoria);
     }
 
     public void desativar(UUID id) {
-        CategoriaServico categoria = buscarPorId(id);
+        CategoriaServico categoria = buscarOuFalhar(id);
         categoria.setAtiva(false);
         categoriaServicoRepository.save(categoria);
+    }
+
+    private CategoriaServico buscarOuFalhar(UUID id) {
+        return categoriaServicoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Categoria não encontrada"));
     }
 }

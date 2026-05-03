@@ -1,7 +1,8 @@
 package br.niaga.servija.controller;
 
-import br.niaga.servija.dto.CategoriaServicoDTO;
-import br.niaga.servija.models.CategoriaServico;
+import br.niaga.servija.dto.EditCategoriaServicoDTO;
+import br.niaga.servija.dto.ResponseCategoriaServicoDTO;
+import br.niaga.servija.dto.SaveCategoriaServicoDTO;
 import br.niaga.servija.service.CategoriaServicoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -18,29 +19,28 @@ public class CategoriaServicoController {
     private final CategoriaServicoService categoriaServicoService;
 
     @PostMapping
-    public ResponseEntity<CategoriaServico> criar(@RequestBody CategoriaServicoDTO dto) {
-        CategoriaServico criada = categoriaServicoService.criar(dto);
-        return ResponseEntity.status(201).body(criada);
+    public ResponseEntity<ResponseCategoriaServicoDTO> criar(@RequestBody SaveCategoriaServicoDTO dto) {
+        return ResponseEntity.status(201).body(categoriaServicoService.criar(dto));
     }
 
     @GetMapping
-    public ResponseEntity<List<CategoriaServico>> listarTodas() {
+    public ResponseEntity<List<ResponseCategoriaServicoDTO>> listarTodas() {
         return ResponseEntity.ok(categoriaServicoService.listarTodas());
     }
 
     @GetMapping("/ativas")
-    public ResponseEntity<List<CategoriaServico>> listarAtivas() {
+    public ResponseEntity<List<ResponseCategoriaServicoDTO>> listarAtivas() {
         return ResponseEntity.ok(categoriaServicoService.listarAtivas());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<CategoriaServico> buscarPorId(@PathVariable UUID id) {
+    public ResponseEntity<ResponseCategoriaServicoDTO> buscarPorId(@PathVariable UUID id) {
         return ResponseEntity.ok(categoriaServicoService.buscarPorId(id));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<CategoriaServico> atualizar(@PathVariable UUID id,
-                                                      @RequestBody CategoriaServicoDTO dto) {
+    public ResponseEntity<ResponseCategoriaServicoDTO> atualizar(@PathVariable UUID id,
+                                                                 @RequestBody EditCategoriaServicoDTO dto) {
         return ResponseEntity.ok(categoriaServicoService.atualizar(id, dto));
     }
 

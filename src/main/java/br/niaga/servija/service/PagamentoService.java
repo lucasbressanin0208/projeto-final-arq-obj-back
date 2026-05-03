@@ -1,6 +1,7 @@
 package br.niaga.servija.service;
 
-import br.niaga.servija.dto.PagamentoDTO;
+import br.niaga.servija.dto.ResponsePagamentoDTO;
+import br.niaga.servija.dto.SavePagamentoDTO;
 import br.niaga.servija.models.*;
 import br.niaga.servija.repository.AgendamentoRepository;
 import br.niaga.servija.repository.PagamentoRepository;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -17,15 +19,13 @@ public class PagamentoService {
     private final PagamentoRepository pagamentoRepository;
     private final AgendamentoRepository agendamentoRepository;
 
-    public Pagamento criar(PagamentoDTO dto) {
+    public ResponsePagamentoDTO criar(SavePagamentoDTO dto) {
         if (dto.getAgendamentoId() == null) {
             throw new IllegalArgumentException("Agendamento é obrigatório");
         }
-
         Agendamento agendamento = agendamentoRepository.findById(dto.getAgendamentoId())
                 .orElseThrow(() -> new RuntimeException("Agendamento não encontrado"));
-
-        return criarPagamentoPendente(agendamento, dto.getMetodo());
+        return ResponsePagamentoDTO.toDTO(criarPagamentoPendente(agendamento, dto.getMetodo()));
     }
 
     public Pagamento criarPagamentoPendente(Agendamento agendamento, MetodoPagamento metodo) {
@@ -50,36 +50,39 @@ public class PagamentoService {
         return pagamentoRepository.save(pagamento);
     }
 
-    public List<Pagamento> listarTodos() {
-        return pagamentoRepository.findAll();
+    public List<ResponsePagamentoDTO> listarTodos() {
+        return pagamentoRepository.findAll().stream()
+                .map(ResponsePagamentoDTO::toDTO)
+                .collect(Collectors.toList());
     }
 
-    public List<Pagamento> listarPorStatus(StatusPagamento status) {
-        return pagamentoRepository.findAllByStatus(status);
+    public List<ResponsePagamentoDTO> listarPorStatus(StatusPagamento status) {
+        return pagamentoRepository.findAllByStatus(status).stream()
+                .map(ResponsePagamentoDTO::toDTO)
+                .collect(Collectors.toList());
     }
 
-    public Pagamento buscarPorId(UUID id) {
-        return pagamentoRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Pagamento não encontrado"));
+    public ResponsePagamentoDTO buscarPorId(UUID id) {
+        return ResponsePagamentoDTO.toDTO(buscarOuFalhar(id));
     }
 
-    public Pagamento buscarPorAgendamento(UUID agendamentoId) {
-        return pagamentoRepository.findByAgendamentoId(agendamentoId)
-                .orElseThrow(() -> new RuntimeException("Pagamento do agendamento não encontrado"));
+    public ResponsePagamentoDTO buscarPorAgendamento(UUID agendamentoId) {
+        return ResponsePagamentoDTO.toDTO(
+                pagamentoRepository.findByAgendamentoId(agendamentoId)
+                        .orElseThrow(() -> new RuntimeException("Pagamento do agendamento não encontrado"))
+        );
     }
 
-    public Pagamento marcarComoPago(UUID id) {
-        Pagamento pagamento = buscarPorId(id);
+    public ResponsePagamentoDTO marcarComoPago(UUID id) {
+        Pagamento pagamento = buscarOuFalhar(id);
         pagamento.marcarComoPago();
-
-        return pagamentoRepository.save(pagamento);
+        return ResponsePagamentoDTO.toDTO(pagamentoRepository.save(pagamento));
     }
 
-    public Pagamento cancelar(UUID id) {
-        Pagamento pagamento = buscarPorId(id);
+    public ResponsePagamentoDTO cancelar(UUID id) {
+        Pagamento pagamento = buscarOuFalhar(id);
         pagamento.cancelar();
-
-        return pagamentoRepository.save(pagamento);
+        return ResponsePagamentoDTO.toDTO(pagamentoRepository.save(pagamento));
     }
 
     public void cancelarPagamentoPendenteDoAgendamento(UUID agendamentoId) {
@@ -90,5 +93,10 @@ public class PagamentoService {
                         pagamentoRepository.save(pagamento);
                     }
                 });
+    }
+
+    private Pagamento buscarOuFalhar(UUID id) {
+        return pagamentoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Pagamento não encontrado"));
     }
 }

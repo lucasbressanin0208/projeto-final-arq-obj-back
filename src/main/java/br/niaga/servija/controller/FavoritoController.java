@@ -1,7 +1,7 @@
 package br.niaga.servija.controller;
 
-import br.niaga.servija.dto.FavoritoDTO;
-import br.niaga.servija.models.Favorito;
+import br.niaga.servija.dto.ResponseFavoritoDTO;
+import br.niaga.servija.dto.SaveFavoritoDTO;
 import br.niaga.servija.service.FavoritoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -18,18 +18,17 @@ public class FavoritoController {
     private final FavoritoService favoritoService;
 
     @PostMapping
-    public ResponseEntity<Favorito> criar(@RequestBody FavoritoDTO dto) {
-        Favorito criado = favoritoService.criar(dto);
-        return ResponseEntity.status(201).body(criado);
+    public ResponseEntity<ResponseFavoritoDTO> criar(@RequestBody SaveFavoritoDTO dto) {
+        return ResponseEntity.status(201).body(favoritoService.criar(dto));
     }
 
     @GetMapping
-    public ResponseEntity<List<Favorito>> listarTodos() {
+    public ResponseEntity<List<ResponseFavoritoDTO>> listarTodos() {
         return ResponseEntity.ok(favoritoService.listarTodos());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Favorito> buscarPorId(@PathVariable UUID id) {
+    public ResponseEntity<ResponseFavoritoDTO> buscarPorId(@PathVariable UUID id) {
         return ResponseEntity.ok(favoritoService.buscarPorId(id));
     }
 

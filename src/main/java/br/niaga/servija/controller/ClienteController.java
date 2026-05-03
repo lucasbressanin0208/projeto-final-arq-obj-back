@@ -1,7 +1,8 @@
 package br.niaga.servija.controller;
 
-import br.niaga.servija.dto.ClienteDTO;
-import br.niaga.servija.models.Cliente;
+import br.niaga.servija.dto.EditClienteDTO;
+import br.niaga.servija.dto.ResponseClienteDTO;
+import br.niaga.servija.dto.SaveClienteDTO;
 import br.niaga.servija.service.ClienteService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -18,24 +19,23 @@ public class ClienteController {
     private final ClienteService clienteService;
 
     @PostMapping
-    public ResponseEntity<Cliente> criar(@RequestBody ClienteDTO dto) {
-        Cliente criado = clienteService.criar(dto);
-        return ResponseEntity.status(201).body(criado);
+    public ResponseEntity<ResponseClienteDTO> criar(@RequestBody SaveClienteDTO dto) {
+        return ResponseEntity.status(201).body(clienteService.criar(dto));
     }
 
     @GetMapping
-    public ResponseEntity<List<Cliente>> listarTodos() {
+    public ResponseEntity<List<ResponseClienteDTO>> listarTodos() {
         return ResponseEntity.ok(clienteService.listarTodos());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Cliente> buscarPorId(@PathVariable UUID id) {
+    public ResponseEntity<ResponseClienteDTO> buscarPorId(@PathVariable UUID id) {
         return ResponseEntity.ok(clienteService.buscarPorId(id));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Cliente> atualizar(@PathVariable UUID id,
-                                             @RequestBody ClienteDTO dto) {
+    public ResponseEntity<ResponseClienteDTO> atualizar(@PathVariable UUID id,
+                                                        @RequestBody EditClienteDTO dto) {
         return ResponseEntity.ok(clienteService.atualizar(id, dto));
     }
 

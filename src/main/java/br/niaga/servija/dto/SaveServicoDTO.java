@@ -1,17 +1,13 @@
 package br.niaga.servija.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.UUID;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
-public class ServicoDTO {
+@Getter
+@Setter
+public class SaveServicoDTO {
 
     private String nome;
     private String descricao;
@@ -19,5 +15,4 @@ public class ServicoDTO {
     private Integer duracaoMinutos;
     private UUID categoriaId;
     private UUID prestadorId;
-    private Boolean ativo;
 }

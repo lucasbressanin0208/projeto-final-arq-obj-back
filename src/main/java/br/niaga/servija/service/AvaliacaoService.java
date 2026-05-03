@@ -1,6 +1,7 @@
 package br.niaga.servija.service;
 
-import br.niaga.servija.dto.AvaliacaoDTO;
+import br.niaga.servija.dto.ResponseAvaliacaoDTO;
+import br.niaga.servija.dto.SaveAvaliacaoDTO;
 import br.niaga.servija.models.*;
 import br.niaga.servija.repository.*;
 import lombok.RequiredArgsConstructor;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -19,8 +21,7 @@ public class AvaliacaoService {
     private final PrestadorRepository prestadorRepository;
     private final AgendamentoRepository agendamentoRepository;
 
-    public Avaliacao criar(AvaliacaoDTO dto) {
-
+    public ResponseAvaliacaoDTO criar(SaveAvaliacaoDTO dto) {
         if (avaliacaoRepository.existsByAgendamentoId(dto.getAgendamentoId())) {
             throw new IllegalArgumentException("Agendamento já possui avaliação");
         }
@@ -47,20 +48,25 @@ public class AvaliacaoService {
                 .dataCriacao(LocalDateTime.now())
                 .build();
 
-        return avaliacaoRepository.save(avaliacao);
+        return ResponseAvaliacaoDTO.toDTO(avaliacaoRepository.save(avaliacao));
     }
 
-    public List<Avaliacao> listarTodos() {
-        return avaliacaoRepository.findAll();
+    public List<ResponseAvaliacaoDTO> listarTodos() {
+        return avaliacaoRepository.findAll().stream()
+                .map(ResponseAvaliacaoDTO::toDTO)
+                .collect(Collectors.toList());
     }
 
-    public Avaliacao buscarPorId(UUID id) {
-        return avaliacaoRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Avaliação não encontrada"));
+    public ResponseAvaliacaoDTO buscarPorId(UUID id) {
+        return ResponseAvaliacaoDTO.toDTO(buscarOuFalhar(id));
     }
 
     public void deletar(UUID id) {
-        Avaliacao avaliacao = buscarPorId(id);
-        avaliacaoRepository.delete(avaliacao);
+        avaliacaoRepository.delete(buscarOuFalhar(id));
+    }
+
+    private Avaliacao buscarOuFalhar(UUID id) {
+        return avaliacaoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Avaliação não encontrada"));
     }
 }

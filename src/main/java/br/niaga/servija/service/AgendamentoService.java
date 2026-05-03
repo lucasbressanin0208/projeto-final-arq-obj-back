@@ -1,6 +1,7 @@
 package br.niaga.servija.service;
 
-import br.niaga.servija.dto.AgendamentoDTO;
+import br.niaga.servija.dto.ResponseAgendamentoDTO;
+import br.niaga.servija.dto.SaveAgendamentoDTO;
 import br.niaga.servija.models.*;
 import br.niaga.servija.repository.AgendamentoRepository;
 import br.niaga.servija.repository.ServicoRepository;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -19,7 +21,7 @@ public class AgendamentoService {
     private final ServicoRepository servicoRepository;
     private final PagamentoService pagamentoService;
 
-    public Agendamento criar(AgendamentoDTO dto) {
+    public ResponseAgendamentoDTO criar(SaveAgendamentoDTO dto) {
         validarDadosObrigatorios(dto);
 
         Servico servico = servicoRepository.findById(dto.getServicoId())
@@ -72,37 +74,41 @@ public class AgendamentoService {
 
         Agendamento agendamentoSalvo = agendamentoRepository.save(agendamento);
 
-        pagamentoService.criarPagamentoPendente(
-                agendamentoSalvo,
-                dto.getMetodoPagamento()
-        );
+        pagamentoService.criarPagamentoPendente(agendamentoSalvo, dto.getMetodoPagamento());
 
-        return agendamentoSalvo;
+        return ResponseAgendamentoDTO.toDTO(agendamentoSalvo);
     }
 
-    public List<Agendamento> listarTodos() {
-        return agendamentoRepository.findAll();
+    public List<ResponseAgendamentoDTO> listarTodos() {
+        return agendamentoRepository.findAll().stream()
+                .map(ResponseAgendamentoDTO::toDTO)
+                .collect(Collectors.toList());
     }
 
-    public List<Agendamento> listarPorCliente(UUID clienteId) {
-        return agendamentoRepository.findAllByClienteId(clienteId);
+    public List<ResponseAgendamentoDTO> listarPorCliente(UUID clienteId) {
+        return agendamentoRepository.findAllByClienteId(clienteId).stream()
+                .map(ResponseAgendamentoDTO::toDTO)
+                .collect(Collectors.toList());
     }
 
-    public List<Agendamento> listarPorPrestador(UUID prestadorId) {
-        return agendamentoRepository.findAllByPrestadorId(prestadorId);
+    public List<ResponseAgendamentoDTO> listarPorPrestador(UUID prestadorId) {
+        return agendamentoRepository.findAllByPrestadorId(prestadorId).stream()
+                .map(ResponseAgendamentoDTO::toDTO)
+                .collect(Collectors.toList());
     }
 
-    public List<Agendamento> listarPorPrestadorEStatus(UUID prestadorId, StatusAgendamento status) {
-        return agendamentoRepository.findAllByPrestadorIdAndStatus(prestadorId, status);
+    public List<ResponseAgendamentoDTO> listarPorPrestadorEStatus(UUID prestadorId, StatusAgendamento status) {
+        return agendamentoRepository.findAllByPrestadorIdAndStatus(prestadorId, status).stream()
+                .map(ResponseAgendamentoDTO::toDTO)
+                .collect(Collectors.toList());
     }
 
-    public Agendamento buscarPorId(UUID id) {
-        return agendamentoRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Agendamento não encontrado"));
+    public ResponseAgendamentoDTO buscarPorId(UUID id) {
+        return ResponseAgendamentoDTO.toDTO(buscarOuFalhar(id));
     }
 
-    public Agendamento confirmar(UUID id) {
-        Agendamento agendamento = buscarPorId(id);
+    public ResponseAgendamentoDTO confirmar(UUID id) {
+        Agendamento agendamento = buscarOuFalhar(id);
 
         boolean existeConflito = agendamentoRepository
                 .existsByPrestadorIdAndStatusAndDataHoraInicioLessThanAndDataHoraFimGreaterThanAndIdNot(
@@ -118,42 +124,40 @@ public class AgendamentoService {
         }
 
         agendamento.confirmar();
-
-        return agendamentoRepository.save(agendamento);
+        return ResponseAgendamentoDTO.toDTO(agendamentoRepository.save(agendamento));
     }
 
-    public Agendamento recusar(UUID id) {
-        Agendamento agendamento = buscarPorId(id);
+    public ResponseAgendamentoDTO recusar(UUID id) {
+        Agendamento agendamento = buscarOuFalhar(id);
         agendamento.recusar();
-
-        return agendamentoRepository.save(agendamento);
+        return ResponseAgendamentoDTO.toDTO(agendamentoRepository.save(agendamento));
     }
 
-    public Agendamento cancelar(UUID id) {
-        Agendamento agendamento = buscarPorId(id);
+    public ResponseAgendamentoDTO cancelar(UUID id) {
+        Agendamento agendamento = buscarOuFalhar(id);
         agendamento.cancelar();
-
         pagamentoService.cancelarPagamentoPendenteDoAgendamento(agendamento.getId());
-
-        return agendamentoRepository.save(agendamento);
+        return ResponseAgendamentoDTO.toDTO(agendamentoRepository.save(agendamento));
     }
 
-    public Agendamento concluir(UUID id) {
-        Agendamento agendamento = buscarPorId(id);
+    public ResponseAgendamentoDTO concluir(UUID id) {
+        Agendamento agendamento = buscarOuFalhar(id);
         agendamento.concluir();
-
-        return agendamentoRepository.save(agendamento);
+        return ResponseAgendamentoDTO.toDTO(agendamentoRepository.save(agendamento));
     }
 
-    private void validarDadosObrigatorios(AgendamentoDTO dto) {
+    private Agendamento buscarOuFalhar(UUID id) {
+        return agendamentoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Agendamento não encontrado"));
+    }
+
+    private void validarDadosObrigatorios(SaveAgendamentoDTO dto) {
         if (dto.getClienteId() == null) {
             throw new IllegalArgumentException("Cliente é obrigatório");
         }
-
         if (dto.getServicoId() == null) {
             throw new IllegalArgumentException("Serviço é obrigatório");
         }
-
         if (dto.getDataHoraInicio() == null) {
             throw new IllegalArgumentException("Data e horário de início são obrigatórios");
         }

@@ -1,7 +1,7 @@
 package br.niaga.servija.controller;
 
-import br.niaga.servija.dto.AvaliacaoDTO;
-import br.niaga.servija.models.Avaliacao;
+import br.niaga.servija.dto.ResponseAvaliacaoDTO;
+import br.niaga.servija.dto.SaveAvaliacaoDTO;
 import br.niaga.servija.service.AvaliacaoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -18,18 +18,17 @@ public class AvaliacaoController {
     private final AvaliacaoService avaliacaoService;
 
     @PostMapping
-    public ResponseEntity<Avaliacao> criar(@RequestBody AvaliacaoDTO dto) {
-        Avaliacao criada = avaliacaoService.criar(dto);
-        return ResponseEntity.status(201).body(criada);
+    public ResponseEntity<ResponseAvaliacaoDTO> criar(@RequestBody SaveAvaliacaoDTO dto) {
+        return ResponseEntity.status(201).body(avaliacaoService.criar(dto));
     }
 
     @GetMapping
-    public ResponseEntity<List<Avaliacao>> listarTodos() {
+    public ResponseEntity<List<ResponseAvaliacaoDTO>> listarTodos() {
         return ResponseEntity.ok(avaliacaoService.listarTodos());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Avaliacao> buscarPorId(@PathVariable UUID id) {
+    public ResponseEntity<ResponseAvaliacaoDTO> buscarPorId(@PathVariable UUID id) {
         return ResponseEntity.ok(avaliacaoService.buscarPorId(id));
     }
 

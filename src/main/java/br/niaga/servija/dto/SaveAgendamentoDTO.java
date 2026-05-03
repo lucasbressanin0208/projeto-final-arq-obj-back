@@ -1,19 +1,15 @@
 package br.niaga.servija.dto;
 
 import br.niaga.servija.models.MetodoPagamento;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
-public class AgendamentoDTO {
+@Getter
+@Setter
+public class SaveAgendamentoDTO {
 
     private UUID clienteId;
     private UUID prestadorId;

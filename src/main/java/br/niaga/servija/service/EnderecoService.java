@@ -1,8 +1,8 @@
 package br.niaga.servija.service;
 
-import br.niaga.servija.dto.endereco.EditEnderecoDTO;
-import br.niaga.servija.dto.endereco.ResponseEnderecoDTO;
-import br.niaga.servija.dto.endereco.SaveEnderecoDTO;
+import br.niaga.servija.dto.EditEnderecoDTO;
+import br.niaga.servija.dto.ResponseEnderecoDTO;
+import br.niaga.servija.dto.SaveEnderecoDTO;
 import br.niaga.servija.models.Endereco;
 import br.niaga.servija.repository.EnderecoRepository;
 import org.springframework.stereotype.Service;

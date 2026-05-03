@@ -1,7 +1,8 @@
 package br.niaga.servija.controller;
 
-import br.niaga.servija.dto.PrestadorDTO;
-import br.niaga.servija.models.Prestador;
+import br.niaga.servija.dto.EditPrestadorDTO;
+import br.niaga.servija.dto.ResponsePrestadorDTO;
+import br.niaga.servija.dto.SavePrestadorDTO;
 import br.niaga.servija.service.PrestadorService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -18,40 +19,39 @@ public class PrestadorController {
     private final PrestadorService prestadorService;
 
     @PostMapping
-    public ResponseEntity<Prestador> criar(@RequestBody PrestadorDTO dto) {
-        Prestador criado = prestadorService.criar(dto);
-        return ResponseEntity.status(201).body(criado);
+    public ResponseEntity<ResponsePrestadorDTO> criar(@RequestBody SavePrestadorDTO dto) {
+        return ResponseEntity.status(201).body(prestadorService.criar(dto));
     }
 
     @GetMapping
-    public ResponseEntity<List<Prestador>> listarTodos() {
+    public ResponseEntity<List<ResponsePrestadorDTO>> listarTodos() {
         return ResponseEntity.ok(prestadorService.listarTodos());
     }
 
     @GetMapping("/ativos")
-    public ResponseEntity<List<Prestador>> listarAtivos() {
+    public ResponseEntity<List<ResponsePrestadorDTO>> listarAtivos() {
         return ResponseEntity.ok(prestadorService.listarAtivos());
     }
 
     @GetMapping("/cidade/{cidade}")
-    public ResponseEntity<List<Prestador>> buscarPorCidade(@PathVariable String cidade) {
+    public ResponseEntity<List<ResponsePrestadorDTO>> buscarPorCidade(@PathVariable String cidade) {
         return ResponseEntity.ok(prestadorService.buscarPorCidade(cidade));
     }
 
     @GetMapping("/cidade/{cidade}/bairro/{bairro}")
-    public ResponseEntity<List<Prestador>> buscarPorCidadeEBairro(@PathVariable String cidade,
-                                                                  @PathVariable String bairro) {
+    public ResponseEntity<List<ResponsePrestadorDTO>> buscarPorCidadeEBairro(@PathVariable String cidade,
+                                                                              @PathVariable String bairro) {
         return ResponseEntity.ok(prestadorService.buscarPorCidadeEBairro(cidade, bairro));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Prestador> buscarPorId(@PathVariable UUID id) {
+    public ResponseEntity<ResponsePrestadorDTO> buscarPorId(@PathVariable UUID id) {
         return ResponseEntity.ok(prestadorService.buscarPorId(id));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Prestador> atualizar(@PathVariable UUID id,
-                                               @RequestBody PrestadorDTO dto) {
+    public ResponseEntity<ResponsePrestadorDTO> atualizar(@PathVariable UUID id,
+                                                          @RequestBody EditPrestadorDTO dto) {
         return ResponseEntity.ok(prestadorService.atualizar(id, dto));
     }
 

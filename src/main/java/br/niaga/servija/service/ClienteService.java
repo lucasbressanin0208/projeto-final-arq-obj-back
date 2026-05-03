@@ -1,6 +1,8 @@
 package br.niaga.servija.service;
 
-import br.niaga.servija.dto.ClienteDTO;
+import br.niaga.servija.dto.EditClienteDTO;
+import br.niaga.servija.dto.ResponseClienteDTO;
+import br.niaga.servija.dto.SaveClienteDTO;
 import br.niaga.servija.models.Cliente;
 import br.niaga.servija.repository.ClienteRepository;
 import lombok.RequiredArgsConstructor;
@@ -8,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -15,49 +18,43 @@ public class ClienteService {
 
     private final ClienteRepository clienteRepository;
 
-    public Cliente criar(ClienteDTO dto) {
+    public ResponseClienteDTO criar(SaveClienteDTO dto) {
         if (clienteRepository.existsByEmail(dto.getEmail())) {
             throw new IllegalArgumentException("Email já cadastrado");
         }
-
         if (dto.getCpf() != null && clienteRepository.existsByCpf(dto.getCpf())) {
             throw new IllegalArgumentException("CPF já cadastrado");
         }
-
-        Cliente cliente = Cliente.builder()
-                .nome(dto.getNome())
-                .email(dto.getEmail())
-                .senha(dto.getSenha())
-                .telefone(dto.getTelefone())
-                .cpf(dto.getCpf())
-                .build();
-
-        return clienteRepository.save(cliente);
+        Cliente cliente = dto.toModel();
+        return ResponseClienteDTO.toDTO(clienteRepository.save(cliente));
     }
 
-    public List<Cliente> listarTodos() {
-        return clienteRepository.findAll();
+    public List<ResponseClienteDTO> listarTodos() {
+        return clienteRepository.findAll().stream()
+                .map(ResponseClienteDTO::toDTO)
+                .collect(Collectors.toList());
     }
 
-    public Cliente buscarPorId(UUID id) {
-        return clienteRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Cliente não encontrado"));
+    public ResponseClienteDTO buscarPorId(UUID id) {
+        return ResponseClienteDTO.toDTO(buscarOuFalhar(id));
     }
 
-    public Cliente atualizar(UUID id, ClienteDTO dto) {
-        Cliente cliente = buscarPorId(id);
-
+    public ResponseClienteDTO atualizar(UUID id, EditClienteDTO dto) {
+        Cliente cliente = buscarOuFalhar(id);
         cliente.setNome(dto.getNome());
         cliente.setEmail(dto.getEmail());
         cliente.setSenha(dto.getSenha());
         cliente.setTelefone(dto.getTelefone());
         cliente.setCpf(dto.getCpf());
-
-        return clienteRepository.save(cliente);
+        return ResponseClienteDTO.toDTO(clienteRepository.save(cliente));
     }
 
     public void deletar(UUID id) {
-        Cliente cliente = buscarPorId(id);
-        clienteRepository.delete(cliente);
+        clienteRepository.delete(buscarOuFalhar(id));
+    }
+
+    private Cliente buscarOuFalhar(UUID id) {
+        return clienteRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Cliente não encontrado"));
     }
 }

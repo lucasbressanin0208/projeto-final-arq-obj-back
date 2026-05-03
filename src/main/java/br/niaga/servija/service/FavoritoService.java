@@ -1,6 +1,7 @@
 package br.niaga.servija.service;
 
-import br.niaga.servija.dto.FavoritoDTO;
+import br.niaga.servija.dto.ResponseFavoritoDTO;
+import br.niaga.servija.dto.SaveFavoritoDTO;
 import br.niaga.servija.models.*;
 import br.niaga.servija.repository.*;
 import lombok.RequiredArgsConstructor;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -18,10 +20,8 @@ public class FavoritoService {
     private final ClienteRepository clienteRepository;
     private final PrestadorRepository prestadorRepository;
 
-    public Favorito criar(FavoritoDTO dto) {
-
-        if (favoritoRepository.existsByClienteIdAndPrestadorId(
-                dto.getClienteId(), dto.getPrestadorId())) {
+    public ResponseFavoritoDTO criar(SaveFavoritoDTO dto) {
+        if (favoritoRepository.existsByClienteIdAndPrestadorId(dto.getClienteId(), dto.getPrestadorId())) {
             throw new IllegalArgumentException("Prestador já favoritado por este cliente");
         }
 
@@ -37,20 +37,25 @@ public class FavoritoService {
                 .dataCriacao(LocalDateTime.now())
                 .build();
 
-        return favoritoRepository.save(favorito);
+        return ResponseFavoritoDTO.toDTO(favoritoRepository.save(favorito));
     }
 
-    public List<Favorito> listarTodos() {
-        return favoritoRepository.findAll();
+    public List<ResponseFavoritoDTO> listarTodos() {
+        return favoritoRepository.findAll().stream()
+                .map(ResponseFavoritoDTO::toDTO)
+                .collect(Collectors.toList());
     }
 
-    public Favorito buscarPorId(UUID id) {
-        return favoritoRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Favorito não encontrado"));
+    public ResponseFavoritoDTO buscarPorId(UUID id) {
+        return ResponseFavoritoDTO.toDTO(buscarOuFalhar(id));
     }
 
     public void deletar(UUID id) {
-        Favorito favorito = buscarPorId(id);
-        favoritoRepository.delete(favorito);
+        favoritoRepository.delete(buscarOuFalhar(id));
+    }
+
+    private Favorito buscarOuFalhar(UUID id) {
+        return favoritoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Favorito não encontrado"));
     }
 }

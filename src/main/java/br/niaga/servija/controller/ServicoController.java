@@ -1,7 +1,8 @@
 package br.niaga.servija.controller;
 
-import br.niaga.servija.dto.ServicoDTO;
-import br.niaga.servija.models.Servico;
+import br.niaga.servija.dto.EditServicoDTO;
+import br.niaga.servija.dto.ResponseServicoDTO;
+import br.niaga.servija.dto.SaveServicoDTO;
 import br.niaga.servija.service.ServicoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -18,34 +19,33 @@ public class ServicoController {
     private final ServicoService servicoService;
 
     @PostMapping
-    public ResponseEntity<Servico> criar(@RequestBody ServicoDTO dto) {
-        Servico criado = servicoService.criar(dto);
-        return ResponseEntity.status(201).body(criado);
+    public ResponseEntity<ResponseServicoDTO> criar(@RequestBody SaveServicoDTO dto) {
+        return ResponseEntity.status(201).body(servicoService.criar(dto));
     }
 
     @GetMapping("/prestador/{prestadorId}")
-    public ResponseEntity<List<Servico>> listarPorPrestador(@PathVariable UUID prestadorId) {
+    public ResponseEntity<List<ResponseServicoDTO>> listarPorPrestador(@PathVariable UUID prestadorId) {
         return ResponseEntity.ok(servicoService.listarPorPrestador(prestadorId));
     }
 
     @GetMapping("/prestador/{prestadorId}/ativos")
-    public ResponseEntity<List<Servico>> listarAtivosPorPrestador(@PathVariable UUID prestadorId) {
+    public ResponseEntity<List<ResponseServicoDTO>> listarAtivosPorPrestador(@PathVariable UUID prestadorId) {
         return ResponseEntity.ok(servicoService.listarAtivosPorPrestador(prestadorId));
     }
 
     @GetMapping("/categoria/{categoriaId}")
-    public ResponseEntity<List<Servico>> listarPorCategoria(@PathVariable UUID categoriaId) {
+    public ResponseEntity<List<ResponseServicoDTO>> listarPorCategoria(@PathVariable UUID categoriaId) {
         return ResponseEntity.ok(servicoService.listarPorCategoria(categoriaId));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Servico> buscarPorId(@PathVariable UUID id) {
+    public ResponseEntity<ResponseServicoDTO> buscarPorId(@PathVariable UUID id) {
         return ResponseEntity.ok(servicoService.buscarPorId(id));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Servico> atualizar(@PathVariable UUID id,
-                                             @RequestBody ServicoDTO dto) {
+    public ResponseEntity<ResponseServicoDTO> atualizar(@PathVariable UUID id,
+                                                        @RequestBody EditServicoDTO dto) {
         return ResponseEntity.ok(servicoService.atualizar(id, dto));
     }
 

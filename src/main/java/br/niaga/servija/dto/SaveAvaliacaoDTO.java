@@ -1,14 +1,13 @@
 package br.niaga.servija.dto;
 
-import lombok.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.UUID;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
-public class AvaliacaoDTO {
+@Getter
+@Setter
+public class SaveAvaliacaoDTO {
 
     private UUID clienteId;
     private UUID prestadorId;

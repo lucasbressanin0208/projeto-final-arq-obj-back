@@ -1,15 +1,14 @@
 package br.niaga.servija.service;
 
-import br.niaga.servija.dto.disponibilidade.EditDisponibilidadeDTO;
-import br.niaga.servija.dto.disponibilidade.ResponseDisponibilidadeDTO;
-import br.niaga.servija.dto.disponibilidade.SaveDisponibilidadeDTO;
+import br.niaga.servija.dto.EditDisponibilidadeDTO;
+import br.niaga.servija.dto.ResponseDisponibilidadeDTO;
+import br.niaga.servija.dto.SaveDisponibilidadeDTO;
 import br.niaga.servija.models.Disponibilidade;
 import br.niaga.servija.models.Prestador;
 import br.niaga.servija.repository.DisponibilidadeRepository;
 import br.niaga.servija.repository.PrestadorRepository;
 import org.springframework.stereotype.Service;
 
-import java.time.DayOfWeek;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
