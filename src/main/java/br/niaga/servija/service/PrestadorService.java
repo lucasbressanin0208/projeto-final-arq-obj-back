@@ -35,6 +35,16 @@ public class PrestadorService {
             Endereco endereco = enderecoRepository.findById(dto.getEnderecoId())
                     .orElseThrow(() -> new RuntimeException("Endereço não encontrado"));
             prestador.setEndereco(endereco);
+        } else if (dto.getCidade() != null && !dto.getCidade().isBlank()) {
+            Endereco endereco = new Endereco();
+            endereco.setRua(dto.getRua() != null && !dto.getRua().isBlank() ? dto.getRua() : "Não informado");
+            endereco.setNumero(dto.getNumero() != null && !dto.getNumero().isBlank() ? dto.getNumero() : "S/N");
+            endereco.setBairro(dto.getBairro() != null && !dto.getBairro().isBlank() ? dto.getBairro() : "Não informado");
+            endereco.setCidade(dto.getCidade());
+            endereco.setEstado(dto.getEstado() != null && !dto.getEstado().isBlank() ? dto.getEstado() : "Não informado");
+            endereco.setCep(dto.getCep());
+            endereco.setComplemento(dto.getComplemento());
+            prestador.setEndereco(enderecoRepository.save(endereco));
         }
         return ResponsePrestadorDTO.toDTO(prestadorRepository.save(prestador));
     }

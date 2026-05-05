@@ -1,6 +1,7 @@
 package br.niaga.servija.dto.response;
 
 import br.niaga.servija.models.Disponibilidade;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,6 +14,7 @@ import java.util.UUID;
 public class ResponseDisponibilidadeDTO {
 
     private UUID id;
+    @JsonFormat(shape = JsonFormat.Shape.NUMBER_INT)
     private DayOfWeek diaSemana;
     private LocalTime horaInicio;
     private LocalTime horaFim;

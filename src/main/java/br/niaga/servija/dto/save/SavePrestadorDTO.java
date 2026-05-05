@@ -28,6 +28,15 @@ public class SavePrestadorDTO {
     private String descricao;
     private UUID enderecoId;
 
+    // Campos de endereço inline (usados quando enderecoId não é fornecido)
+    private String rua;
+    private String numero;
+    private String bairro;
+    private String cidade;
+    private String estado;
+    private String cep;
+    private String complemento;
+
     public Prestador toModel() {
         Prestador p = new Prestador();
         p.setNome(this.nome);
