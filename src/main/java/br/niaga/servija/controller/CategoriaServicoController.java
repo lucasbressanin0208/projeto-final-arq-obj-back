@@ -31,6 +31,7 @@ public class CategoriaServicoController {
 
     @GetMapping("/ativas")
     public ResponseEntity<List<ResponseCategoriaServicoDTO>> listarAtivas() {
+        System.out.println("CONTROLLER CHAMADO: GET /categorias/ativas");
         return ResponseEntity.ok(categoriaServicoService.listarAtivas());
     }
 
