@@ -19,6 +19,8 @@ public class ResponsePrestadorDTO {
     private BigDecimal notaMedia;
     private Boolean ativo;
     private ResponseEnderecoDTO endereco;
+    private String cidade;
+    private String bairro;
 
     public static ResponsePrestadorDTO toDTO(Prestador p) {
         ResponsePrestadorDTO dto = new ResponsePrestadorDTO();
@@ -29,7 +31,11 @@ public class ResponsePrestadorDTO {
         dto.setDescricao(p.getDescricao());
         dto.setNotaMedia(p.getNotaMedia());
         dto.setAtivo(p.getAtivo());
-        dto.setEndereco(p.getEndereco() != null ? ResponseEnderecoDTO.toDTO(p.getEndereco()) : null);
+        if (p.getEndereco() != null) {
+            dto.setEndereco(ResponseEnderecoDTO.toDTO(p.getEndereco()));
+            dto.setCidade(p.getEndereco().getCidade());
+            dto.setBairro(p.getEndereco().getBairro());
+        }
         return dto;
     }
 }

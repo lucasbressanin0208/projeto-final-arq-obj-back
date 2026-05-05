@@ -13,6 +13,7 @@ public class ResponseAvaliacaoDTO {
 
     private UUID id;
     private UUID clienteId;
+    private String clienteNome;
     private UUID prestadorId;
     private UUID agendamentoId;
     private Integer nota;
@@ -22,7 +23,10 @@ public class ResponseAvaliacaoDTO {
     public static ResponseAvaliacaoDTO toDTO(Avaliacao a) {
         ResponseAvaliacaoDTO dto = new ResponseAvaliacaoDTO();
         dto.setId(a.getId());
-        dto.setClienteId(a.getCliente() != null ? a.getCliente().getId() : null);
+        if (a.getCliente() != null) {
+            dto.setClienteId(a.getCliente().getId());
+            dto.setClienteNome(a.getCliente().getNome());
+        }
         dto.setPrestadorId(a.getPrestador() != null ? a.getPrestador().getId() : null);
         dto.setAgendamentoId(a.getAgendamento() != null ? a.getAgendamento().getId() : null);
         dto.setNota(a.getNota());

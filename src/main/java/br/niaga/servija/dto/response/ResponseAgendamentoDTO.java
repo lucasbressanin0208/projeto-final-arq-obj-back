@@ -14,8 +14,12 @@ public class ResponseAgendamentoDTO {
 
     private UUID id;
     private UUID clienteId;
+    private String clienteNome;
     private UUID prestadorId;
+    private String prestadorNome;
     private UUID servicoId;
+    private String servicoNome;
+    private Double servicoPreco;
     private LocalDateTime dataHoraInicio;
     private LocalDateTime dataHoraFim;
     private StatusAgendamento status;
@@ -24,9 +28,19 @@ public class ResponseAgendamentoDTO {
     public static ResponseAgendamentoDTO toDTO(Agendamento a) {
         ResponseAgendamentoDTO dto = new ResponseAgendamentoDTO();
         dto.setId(a.getId());
-        dto.setClienteId(a.getCliente() != null ? a.getCliente().getId() : null);
-        dto.setPrestadorId(a.getPrestador() != null ? a.getPrestador().getId() : null);
-        dto.setServicoId(a.getServico() != null ? a.getServico().getId() : null);
+        if (a.getCliente() != null) {
+            dto.setClienteId(a.getCliente().getId());
+            dto.setClienteNome(a.getCliente().getNome());
+        }
+        if (a.getPrestador() != null) {
+            dto.setPrestadorId(a.getPrestador().getId());
+            dto.setPrestadorNome(a.getPrestador().getNome());
+        }
+        if (a.getServico() != null) {
+            dto.setServicoId(a.getServico().getId());
+            dto.setServicoNome(a.getServico().getNome());
+            dto.setServicoPreco(a.getServico().getPreco());
+        }
         dto.setDataHoraInicio(a.getDataHoraInicio());
         dto.setDataHoraFim(a.getDataHoraFim());
         dto.setStatus(a.getStatus());
