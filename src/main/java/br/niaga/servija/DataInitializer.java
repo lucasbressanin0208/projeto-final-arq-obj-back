@@ -5,6 +5,7 @@ import br.niaga.servija.repository.CategoriaServicoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -14,9 +15,18 @@ import java.util.List;
 public class DataInitializer implements ApplicationRunner {
 
     private final CategoriaServicoRepository categoriaServicoRepository;
+    private final JdbcTemplate jdbcTemplate;
 
     @Override
     public void run(ApplicationArguments args) {
+        // Remove stale FK constraint that references table "endereco" (wrong name).
+        // The Endereco entity uses table "enderecos", but an old constraint was created
+        // before the table was renamed. This causes FK violations on every prestador INSERT.
+        jdbcTemplate.execute(
+            "ALTER TABLE prestadores DROP CONSTRAINT IF EXISTS fkt1bcw9q4ydx3dwf7rwofk2x8r"
+        );
+
+        // Seed categories
         if (categoriaServicoRepository.count() > 0) return;
 
         List<CategoriaServico> categorias = List.of(
