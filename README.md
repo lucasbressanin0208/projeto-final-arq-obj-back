@@ -6,6 +6,9 @@
 <img src="https://img.shields.io/badge/Maven-C71A36?style=for-the-badge&logo=apachemaven&logoColor=white"/>
 <img src="https://img.shields.io/badge/Lombok-pink?style=for-the-badge&logoColor=white"/>
 
+## Alunos
+Gabriel Rosa, João Pedro Murbach, João Pedro Vivacqua, Lucas Bressanin, Murilo Godoy
+
 <br/><br/>
 
 ```
